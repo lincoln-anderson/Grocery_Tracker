@@ -14,8 +14,10 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            let newItem = GroceryItem(context: viewContext)
+            newItem.name = "sample"
+            newItem.purchasedDate = Date()
+            newItem.expirationDate = Date()
         }
         do {
             try viewContext.save()
@@ -27,6 +29,18 @@ struct PersistenceController {
         }
         return result
     }()
+    
+    func save() {
+        let context = container.viewContext
+
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Show some error here
+            }
+        }
+    }
 
     let container: NSPersistentCloudKitContainer
 

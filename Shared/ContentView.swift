@@ -12,32 +12,30 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.purchasedDate, ascending: true)],
         animation: .default)
-    private var items: FetchedResults<Item>
+    private var groceryItems: FetchedResults<GroceryItem>
 
     var body: some View {
-        List {
-            ForEach(items) { item in
-                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+        VStack{
+            List {
+                ForEach(groceryItems) { groceryItem in
+                    GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                }
+                .onDelete(perform: deleteItems)
             }
-            .onDelete(perform: deleteItems)
-        }
-        .toolbar {
-            #if os(iOS)
-            EditButton()
-            #endif
-
-            Button(action: addItem) {
-                Label("Add Item", systemImage: "plus")
-            }
+            Button(action: {addItem()}, label: {
+                Text("hey")
+            })
         }
     }
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            let newItem = GroceryItem(context: viewContext)
+            newItem.purchasedDate = Date()
+            newItem.expirationDate = Date()
+            newItem.name = "Sample"
 
             do {
                 try viewContext.save()
@@ -52,7 +50,7 @@ struct ContentView: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+            offsets.map { groceryItems[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()
@@ -66,7 +64,7 @@ struct ContentView: View {
     }
 }
 
-private let itemFormatter: DateFormatter = {
+private let groceryItemFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateStyle = .short
     formatter.timeStyle = .medium
