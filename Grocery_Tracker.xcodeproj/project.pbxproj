@@ -21,6 +21,8 @@
 		01A7CCCA2638946D00A5A40B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01A7CC9A2638946C00A5A40B /* Assets.xcassets */; };
 		01A7CCDA2638A02200A5A40B /* GroceryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCD92638A02200A5A40B /* GroceryItemView.swift */; };
 		01A7CCDB2638A02200A5A40B /* GroceryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCD92638A02200A5A40B /* GroceryItemView.swift */; };
+		01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCDC2639943300A5A40B /* AddItemView.swift */; };
+		01A7CCDE2639943300A5A40B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCDC2639943300A5A40B /* AddItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,7 @@
 		01A7CCBE2638946C00A5A40B /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		01A7CCC02638946D00A5A40B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01A7CCD92638A02200A5A40B /* GroceryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItemView.swift; sourceTree = "<group>"; };
+		01A7CCDC2639943300A5A40B /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,12 +110,10 @@
 		01A7CC942638946A00A5A40B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */,
-				01A7CC982638946A00A5A40B /* ContentView.swift */,
-				01A7CCD92638A02200A5A40B /* GroceryItemView.swift */,
-				01A7CC992638946A00A5A40B /* Persistence.swift */,
+				01A7CCE12639948200A5A40B /* appframework */,
+				01A7CCE02639945D00A5A40B /* dataStructures */,
+				01A7CCDF2639944500A5A40B /* views */,
 				01A7CC9A2638946C00A5A40B /* Assets.xcassets */,
-				01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -161,6 +162,33 @@
 				01A7CCC02638946D00A5A40B /* Info.plist */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		01A7CCDF2639944500A5A40B /* views */ = {
+			isa = PBXGroup;
+			children = (
+				01A7CC982638946A00A5A40B /* ContentView.swift */,
+				01A7CCDC2639943300A5A40B /* AddItemView.swift */,
+				01A7CCD92638A02200A5A40B /* GroceryItemView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		01A7CCE02639945D00A5A40B /* dataStructures */ = {
+			isa = PBXGroup;
+			children = (
+				01A7CC992638946A00A5A40B /* Persistence.swift */,
+				01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */,
+			);
+			path = dataStructures;
+			sourceTree = "<group>";
+		};
+		01A7CCE12639948200A5A40B /* appframework */ = {
+			isa = PBXGroup;
+			children = (
+				01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */,
+			);
+			path = appframework;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,6 +349,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01A7CCC32638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
+				01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */,
 				01A7CCDA2638A02200A5A40B /* GroceryItemView.swift in Sources */,
 				01A7CCC72638946D00A5A40B /* Persistence.swift in Sources */,
 				01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */,
@@ -333,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01A7CCC42638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
+				01A7CCDE2639943300A5A40B /* AddItemView.swift in Sources */,
 				01A7CCDB2638A02200A5A40B /* GroceryItemView.swift in Sources */,
 				01A7CCC82638946D00A5A40B /* Persistence.swift in Sources */,
 				01A7CCC22638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */,
