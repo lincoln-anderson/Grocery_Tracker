@@ -15,6 +15,8 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.purchasedDate, ascending: true)],
         animation: .default)
     private var groceryItems: FetchedResults<GroceryItem>
+    
+    @State var showingAddSheet = false
 
     var body: some View {
         VStack{
@@ -24,9 +26,18 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-            Button(action: {addItem()}, label: {
-                Text("hey")
+            Button(action: {self.showingAddSheet.toggle()}, label: {
+                Text("Add Item")
             })
+            .sheet(isPresented: $showingAddSheet, onDismiss: {
+                
+                showingAddSheet = false
+                
+            }) {
+                
+                AddItemView(isPresented: $showingAddSheet, newName:"Item Name", expirationDate: Date())
+                
+            }
         }
     }
 
