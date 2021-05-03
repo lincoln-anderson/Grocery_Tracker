@@ -27,6 +27,7 @@ struct GroceryItemView: View {
             Spacer()
             VStack{
                 Text("Purchased Date \(self.passedGroceryItemPurchasedDate, formatter: GroceryItemView.DateFormat)")
+                Spacer()
                 Text("Expiration Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemView.DateFormat)")
             }
         }

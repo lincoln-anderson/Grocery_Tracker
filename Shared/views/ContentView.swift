@@ -13,45 +13,88 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.purchasedDate, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.expirationDate, ascending: true)],
         animation: .default)
     private var groceryItems: FetchedResults<GroceryItem>
     
     @State var showingAddSheet = false
+    
+
+    let columns = [
+        GridItem(.adaptive(minimum: 150))
+    ]
 
     var body: some View {
+        
         VStack{
-            List {
-                ForEach(groceryItems) { groceryItem in
-                    GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                }
-                .onDelete(perform: deleteItems)
-            }
-            Button(action: {
-                    
-                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                        if success {
-                            print("All set!")
-                        } else if let error = error {
-                            print(error.localizedDescription)
+            ScrollView {
+                    LazyVGrid(columns: columns, spacing: 50) {
+                        ForEach(groceryItems) { groceryItem in
+                            GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
+                        .onDelete(perform: deleteItems)
                     }
-                    
-                    self.showingAddSheet.toggle()
-                
-            }, label: {
-                Text("Add Item")
-            })
-            .sheet(isPresented: $showingAddSheet, onDismiss: {
-                
-                showingAddSheet = false
-                
-            }) {
-                
-                AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date())
-                
-            }
+                    .padding(.horizontal)
+                }
+            
+            Button(action: {
+                                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                                    if success {
+                                        print("All set!")
+                                    } else if let error = error {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+            
+                                self.showingAddSheet.toggle()
+            
+                        }, label: {
+                            Text("Add Item")
+                        })
+                        .sheet(isPresented: $showingAddSheet, onDismiss: {
+            
+                            showingAddSheet = false
+            
+                        }) {
+            
+                            AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date())
+            
+                        }
+            
         }
+        
+//        VStack{
+//            List {
+//                ForEach(groceryItems) { groceryItem in
+//                    GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+//                }
+//                .onDelete(perform: deleteItems)
+//            }
+//            Button(action: {
+//
+//                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+//                        if success {
+//                            print("All set!")
+//                        } else if let error = error {
+//                            print(error.localizedDescription)
+//                        }
+//                    }
+//
+//                    self.showingAddSheet.toggle()
+//
+//            }, label: {
+//                Text("Add Item")
+//            })
+//            .sheet(isPresented: $showingAddSheet, onDismiss: {
+//
+//                showingAddSheet = false
+//
+//            }) {
+//
+//                AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date())
+//
+//            }
+//        }
     }
 
     private func addItem() {
