@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import UserNotifications
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -26,7 +27,19 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-            Button(action: {self.showingAddSheet.toggle()}, label: {
+            Button(action: {
+                    
+                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                        if success {
+                            print("All set!")
+                        } else if let error = error {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                    self.showingAddSheet.toggle()
+                
+            }, label: {
                 Text("Add Item")
             })
             .sheet(isPresented: $showingAddSheet, onDismiss: {
@@ -35,7 +48,7 @@ struct ContentView: View {
                 
             }) {
                 
-                AddItemView(isPresented: $showingAddSheet, newName:"Item Name", expirationDate: Date())
+                AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date())
                 
             }
         }
