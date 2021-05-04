@@ -90,6 +90,17 @@ struct AddItemView: View {
                     
                 }, label: {
                     Text("Save Item")
+                        .fontWeight(.bold)
+                        .font(.title)
+                        .padding(30)
+                        .background(Color(hex: "404040"))
+                        .cornerRadius(50)
+                            .foregroundColor(Color(hex: "40cac6"))
+                        .padding(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 50)
+                                .stroke(Color(hex: "404040"), lineWidth: 5)
+                        )
                 })
                 
             }

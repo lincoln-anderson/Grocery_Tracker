@@ -19,6 +19,8 @@ struct ContentView: View {
     
     @State var showingAddSheet = false
     
+    @State var showingRemoveSheet = false
+    
 
     let columns = [
         GridItem(.adaptive(minimum: 150))
@@ -32,35 +34,68 @@ struct ContentView: View {
                         ForEach(groceryItems) { groceryItem in
                             GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
-                        .onDelete(perform: deleteItems)
                     }
                     .padding(.horizontal)
-                }
+            }
+            Spacer()
             
-            Button(action: {
-                                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                                    if success {
-                                        print("All set!")
-                                    } else if let error = error {
-                                        print(error.localizedDescription)
+            HStack{
+                
+                Spacer()
+            
+                Button(action: {self.showingRemoveSheet.toggle()}, label: {
+                        Text("-")
+                            .font(.title)
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(Color(hex: "40cac6"))
+                            .background(Color(hex: "404040"))
+                            .clipShape(Circle())
+                    
+                })
+                    .sheet(isPresented: $showingRemoveSheet, onDismiss: {
+        
+                        showingAddSheet = false
+        
+                    }) {
+        
+                        UsedGroceryView(isPresented: $showingRemoveSheet)
+        
+                    }
+                
+                Spacer()
+                
+                Button(action: {
+                                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                                        if success {
+                                            print("All set!")
+                                        } else if let error = error {
+                                            print(error.localizedDescription)
+                                        }
                                     }
-                                }
+                
+                                    self.showingAddSheet.toggle()
+                
+                            }, label: {
+                                Text("+")
+                                    .font(.title)
+                                    .frame(width: 100, height: 100)
+                                    .foregroundColor(Color(hex: "40cac6"))
+                                    .background(Color(hex: "404040"))
+                                    .clipShape(Circle())
+                            })
+                            .sheet(isPresented: $showingAddSheet, onDismiss: {
+                
+                                showingAddSheet = false
+                
+                            }) {
+                
+                                AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date())
+                
+                            }
+                
+                Spacer()
             
-                                self.showingAddSheet.toggle()
-            
-                        }, label: {
-                            Text("Add Item")
-                        })
-                        .sheet(isPresented: $showingAddSheet, onDismiss: {
-            
-                            showingAddSheet = false
-            
-                        }) {
-            
-                            AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date())
-            
-                        }
-            
+            }
         }
         
 //        VStack{
@@ -115,20 +150,7 @@ struct ContentView: View {
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { groceryItems[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
+    
 }
 
 private let groceryItemFormatter: DateFormatter = {
@@ -140,6 +162,6 @@ private let groceryItemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).preferredColorScheme(.dark)
     }
 }

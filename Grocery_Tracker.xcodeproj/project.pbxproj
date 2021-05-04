@@ -23,6 +23,10 @@
 		01A7CCDB2638A02200A5A40B /* GroceryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCD92638A02200A5A40B /* GroceryItemView.swift */; };
 		01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCDC2639943300A5A40B /* AddItemView.swift */; };
 		01A7CCDE2639943300A5A40B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCDC2639943300A5A40B /* AddItemView.swift */; };
+		01A7CCE32640755600A5A40B /* UsedGroceryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCE22640755600A5A40B /* UsedGroceryView.swift */; };
+		01A7CCE42640755600A5A40B /* UsedGroceryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCE22640755600A5A40B /* UsedGroceryView.swift */; };
+		01A7CCE626407D9100A5A40B /* HexColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCE526407D9100A5A40B /* HexColorExtension.swift */; };
+		01A7CCE726407D9100A5A40B /* HexColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCE526407D9100A5A40B /* HexColorExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +65,8 @@
 		01A7CCC02638946D00A5A40B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01A7CCD92638A02200A5A40B /* GroceryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItemView.swift; sourceTree = "<group>"; };
 		01A7CCDC2639943300A5A40B /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
+		01A7CCE22640755600A5A40B /* UsedGroceryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedGroceryView.swift; sourceTree = "<group>"; };
+		01A7CCE526407D9100A5A40B /* HexColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexColorExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				01A7CC982638946A00A5A40B /* ContentView.swift */,
+				01A7CCE22640755600A5A40B /* UsedGroceryView.swift */,
 				01A7CCDC2639943300A5A40B /* AddItemView.swift */,
 				01A7CCD92638A02200A5A40B /* GroceryItemView.swift */,
 			);
@@ -177,6 +184,7 @@
 		01A7CCE02639945D00A5A40B /* dataStructures */ = {
 			isa = PBXGroup;
 			children = (
+				01A7CCE526407D9100A5A40B /* HexColorExtension.swift */,
 				01A7CC992638946A00A5A40B /* Persistence.swift */,
 				01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */,
 			);
@@ -350,6 +358,8 @@
 			files = (
 				01A7CCC32638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
 				01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */,
+				01A7CCE32640755600A5A40B /* UsedGroceryView.swift in Sources */,
+				01A7CCE626407D9100A5A40B /* HexColorExtension.swift in Sources */,
 				01A7CCDA2638A02200A5A40B /* GroceryItemView.swift in Sources */,
 				01A7CCC72638946D00A5A40B /* Persistence.swift in Sources */,
 				01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */,
@@ -363,6 +373,8 @@
 			files = (
 				01A7CCC42638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
 				01A7CCDE2639943300A5A40B /* AddItemView.swift in Sources */,
+				01A7CCE42640755600A5A40B /* UsedGroceryView.swift in Sources */,
+				01A7CCE726407D9100A5A40B /* HexColorExtension.swift in Sources */,
 				01A7CCDB2638A02200A5A40B /* GroceryItemView.swift in Sources */,
 				01A7CCC82638946D00A5A40B /* Persistence.swift in Sources */,
 				01A7CCC22638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */,
