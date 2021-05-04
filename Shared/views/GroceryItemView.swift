@@ -24,6 +24,7 @@ struct GroceryItemView: View {
     var body: some View {
         HStack{
             Text(passedGroceryItemName)
+                .bold()
             Spacer()
             VStack{
                 Text("Purchased Date \(self.passedGroceryItemPurchasedDate, formatter: GroceryItemView.DateFormat)")
