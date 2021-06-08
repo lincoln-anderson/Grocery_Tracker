@@ -19,14 +19,22 @@ struct UsedGroceryView: View {
     
     @Binding var isPresented: Bool
     
+    @Binding var filterString: String
+    
     var body: some View {
         VStack{
-                   List {
-                       ForEach(groceryItems) { groceryItem in
-                           GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                       }
-                       .onDelete(perform: deleteItems)
-                   }
+            if #available(iOS 15.0, *) {
+                List() {
+                    ForEach(groceryItems) { groceryItem in
+                        GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                    }
+                    
+                    .onDelete(perform: deleteItems)
+                }
+                .searchable("Search items", text: $filterString)
+            } else {
+                // Fallback on earlier versions
+            }
         }
     }
     
@@ -48,7 +56,11 @@ struct UsedGroceryView: View {
 
 struct UsedGroceryView_Previews: PreviewProvider {
     @State static var isShowing = false
+    
+    
+    @State static var testString = "string"
+    
     static var previews: some View {
-        UsedGroceryView(isPresented: $isShowing)
+        UsedGroceryView(isPresented: $isShowing, filterString: $testString)
     }
 }

@@ -46,7 +46,7 @@ struct AddItemView: View {
                 
                 Spacer()
                 
-                DatePicker("Experation Date", selection: $expirationDate, displayedComponents: .date)
+                DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: .date)
                     .padding(.horizontal)
                 Spacer()
                 Button(action: {
@@ -60,9 +60,9 @@ struct AddItemView: View {
                     
                     var dateComponents = DateComponents()
                     
-                    dateComponents.hour = 10
+                    dateComponents.hour = 11
                     
-                    dateComponents.minute = 05
+                    dateComponents.minute = 00
                     
                     let newDateFormatter = DateFormatter()
                     newDateFormatter.dateFormat = "MM"
