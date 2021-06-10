@@ -11,8 +11,6 @@ struct GroceryItemGridView: View {
     
     var passedGroceryItemName: String
     
-    var passedGroceryItemPurchasedDate: Date
-    
     var passedGroceryItemExpirationDate: Date
     
     static let DateFormat: DateFormatter = {
@@ -22,19 +20,26 @@ struct GroceryItemGridView: View {
         }()
     var body: some View {
         ScrollView{
-            Text(passedGroceryItemName)
-                .font(.title3)
-                .bold()
-            Spacer()
             VStack{
-                Text("Purchased Date:")
-                Text(self.passedGroceryItemPurchasedDate, formatter: GroceryItemGridView.DateFormat)
                 Spacer()
-                Text("Expiration Date:")
-                Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
+                HStack{
+                    Text(passedGroceryItemName)
+                        .font(.body)
+                        .bold()
+                    VStack{
+                        Text("Exp. Date:")
+                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
+                    }
+                }
+                Spacer()
             }
         }
-        .frame(minWidth: 150, idealWidth: 150, maxWidth: 150, minHeight: 150, idealHeight: 150, maxHeight: 150, alignment: .center)
+        .frame(minWidth: 150, idealWidth: 150, maxWidth: 150, minHeight: 75, idealHeight: 75, maxHeight: 75, alignment: .center)
+        .padding()
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.blue, lineWidth: 4)
+            )
         
     }
 }
@@ -46,9 +51,8 @@ struct GroceryItemGridView_Previews: PreviewProvider {
     static var previews: some View {
         let item = GroceryItem(context: viewContext)
         item.expirationDate = Date()
-        item.purchasedDate = Date()
         item.name = "Sample"
         
-        return GroceryItemGridView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
+        return GroceryItemGridView(passedGroceryItemName: item.name!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
     }
 }

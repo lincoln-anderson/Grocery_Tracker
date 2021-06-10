@@ -34,7 +34,7 @@ struct ContentView: View {
             ScrollView {
                     LazyVGrid(columns: columns, spacing: 50) {
                         ForEach(groceryItems) { groceryItem in
-                            GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                            GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
                     }
                     .padding(.horizontal)
