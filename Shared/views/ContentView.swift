@@ -32,7 +32,7 @@ struct ContentView: View {
             ScrollView {
                     LazyVGrid(columns: columns, spacing: 50) {
                         ForEach(groceryItems) { groceryItem in
-                            GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                            GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
                     }
                     .padding(.horizontal)
@@ -46,7 +46,7 @@ struct ContentView: View {
                 Button(action: {self.showingRemoveSheet.toggle()}, label: {
                         Text("-")
                             .font(.title)
-                            .frame(width: 100, height: 100)
+                            .frame(width: 80, height: 80)
                             .foregroundColor(Color(hex: "40cac6"))
                             .background(Color(hex: "404040"))
                             .clipShape(Circle())
@@ -78,7 +78,7 @@ struct ContentView: View {
                             }, label: {
                                 Text("+")
                                     .font(.title)
-                                    .frame(width: 100, height: 100)
+                                    .frame(width: 80, height: 80)
                                     .foregroundColor(Color(hex: "40cac6"))
                                     .background(Color(hex: "404040"))
                                     .clipShape(Circle())

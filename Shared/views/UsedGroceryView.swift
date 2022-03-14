@@ -23,7 +23,7 @@ struct UsedGroceryView: View {
         VStack{
                    List {
                        ForEach(groceryItems) { groceryItem in
-                           GroceryItemView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                           GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                        }
                        .onDelete(perform: deleteItems)
                    }

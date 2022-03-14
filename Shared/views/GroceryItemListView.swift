@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GroceryItemView: View {
+struct GroceryItemListView: View {
     
     var passedGroceryItemName: String
     
@@ -17,7 +17,7 @@ struct GroceryItemView: View {
     
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.dateStyle = .long
+            formatter.dateStyle = .short
             return formatter
         }()
     
@@ -27,15 +27,16 @@ struct GroceryItemView: View {
                 .bold()
             Spacer()
             VStack{
-                Text("Purchased Date \(self.passedGroceryItemPurchasedDate, formatter: GroceryItemView.DateFormat)")
+                Text("Purchased Date \(self.passedGroceryItemPurchasedDate, formatter: GroceryItemListView.DateFormat)")
                 Spacer()
-                Text("Expiration Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemView.DateFormat)")
+                Text("Expiration Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
             }
         }
+        
     }
 }
 
-struct GroceryItemView_Previews: PreviewProvider {
+struct GroceryItemListView_Previews: PreviewProvider {
     
     static var viewContext = PersistenceController.preview.container.viewContext
     
@@ -45,6 +46,6 @@ struct GroceryItemView_Previews: PreviewProvider {
         item.purchasedDate = Date()
         item.name = "Sample"
         
-        return GroceryItemView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
+        return GroceryItemListView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
     }
 }
