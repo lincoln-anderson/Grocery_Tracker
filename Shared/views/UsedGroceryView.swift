@@ -31,7 +31,7 @@ struct UsedGroceryView: View {
                     
                     .onDelete(perform: deleteItems)
                 }
-                .searchable("Search items", text: $filterString)
+                .searchable(text: $filterString)
             } else {
                 // Fallback on earlier versions
             }

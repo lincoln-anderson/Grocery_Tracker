@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+
+/// An Extension of Color that allows you to sure the hex color code
 public extension Color {
     
     init(hex: String) {

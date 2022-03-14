@@ -49,8 +49,6 @@ struct ContentView: View {
                         Text("-")
                             .font(.title)
                             .frame(width: 80, height: 80)
-                            .foregroundColor(Color(hex: "40cac6"))
-                            .background(Color(hex: "404040"))
                             .clipShape(Circle())
                     
                 })
@@ -81,8 +79,6 @@ struct ContentView: View {
                                 Text("+")
                                     .font(.title)
                                     .frame(width: 80, height: 80)
-                                    .foregroundColor(Color(hex: "40cac6"))
-                                    .background(Color(hex: "404040"))
                                     .clipShape(Circle())
                             })
                             .sheet(isPresented: $showingAddSheet, onDismiss: {
