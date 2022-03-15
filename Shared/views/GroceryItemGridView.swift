@@ -22,7 +22,7 @@ struct GroceryItemGridView: View {
         ScrollView{
             VStack{
                 Spacer()
-                HStack{
+                VStack{
                     Text(passedGroceryItemName)
                         .font(.body)
                         .bold()
@@ -36,10 +36,6 @@ struct GroceryItemGridView: View {
         }
         .frame(minWidth: 150, idealWidth: 150, maxWidth: 150, minHeight: 75, idealHeight: 75, maxHeight: 75, alignment: .center)
         .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.blue, lineWidth: 4)
-            )
         
     }
 }
