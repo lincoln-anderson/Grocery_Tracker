@@ -62,7 +62,7 @@ struct AddItemView: View {
                     
                     dateComponents.hour = 11
                     
-                    dateComponents.minute = 06
+                    dateComponents.minute = 00
                     
                     let newDateFormatter = DateFormatter()
                     newDateFormatter.dateFormat = "MM"
@@ -75,7 +75,7 @@ struct AddItemView: View {
                     
                     newDateFormatter.dateFormat = "dd"
                     
-                    dateComponents.day = (Int(newDateFormatter.string(from: expirationDate)) ?? 0) - 3
+                    dateComponents.day = Int(newDateFormatter.string(from: expirationDate))
 
                     // show this notification five seconds from now
                     let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
@@ -90,7 +90,6 @@ struct AddItemView: View {
                     
                 }, label: {
                     Text("Save Item")
-
                         .font(.title)
                 })
                 
