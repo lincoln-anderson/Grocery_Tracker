@@ -54,9 +54,9 @@
 		01A7CC982638946A00A5A40B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		01A7CC992638946A00A5A40B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		01A7CC9A2638946C00A5A40B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		01A7CC9F2638946C00A5A40B /* Grocery_Tracker___.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery_Tracker___.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A7CC9F2638946C00A5A40B /* Grocery Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A7CCA22638946C00A5A40B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		01A7CCA72638946C00A5A40B /* Grocery_Tracker___.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery_Tracker___.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A7CCA72638946C00A5A40B /* Grocery Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A7CCA92638946C00A5A40B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01A7CCAA2638946C00A5A40B /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		01A7CCAF2638946C00A5A40B /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,8 +132,8 @@
 		01A7CCA02638946C00A5A40B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				01A7CC9F2638946C00A5A40B /* Grocery_Tracker___.app */,
-				01A7CCA72638946C00A5A40B /* Grocery_Tracker___.app */,
+				01A7CC9F2638946C00A5A40B /* Grocery Tracker.app */,
+				01A7CCA72638946C00A5A40B /* Grocery Tracker.app */,
 				01A7CCAF2638946C00A5A40B /* Tests iOS.xctest */,
 				01A7CCBA2638946C00A5A40B /* Tests macOS.xctest */,
 			);
@@ -208,9 +208,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		01A7CC9E2638946C00A5A40B /* Grocery_Tracker___ (iOS) */ = {
+		01A7CC9E2638946C00A5A40B /* Grocery Tracker (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01A7CCCD2638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery_Tracker___ (iOS)" */;
+			buildConfigurationList = 01A7CCCD2638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery Tracker (iOS)" */;
 			buildPhases = (
 				01A7CC9B2638946C00A5A40B /* Sources */,
 				01A7CC9C2638946C00A5A40B /* Frameworks */,
@@ -220,14 +220,14 @@
 			);
 			dependencies = (
 			);
-			name = "Grocery_Tracker___ (iOS)";
+			name = "Grocery Tracker (iOS)";
 			productName = "Grocery_Tracker (iOS)";
-			productReference = 01A7CC9F2638946C00A5A40B /* Grocery_Tracker___.app */;
+			productReference = 01A7CC9F2638946C00A5A40B /* Grocery Tracker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		01A7CCA62638946C00A5A40B /* Grocery_Tracker___ (macOS) */ = {
+		01A7CCA62638946C00A5A40B /* Grocery Tracker (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01A7CCD02638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery_Tracker___ (macOS)" */;
+			buildConfigurationList = 01A7CCD02638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery Tracker (macOS)" */;
 			buildPhases = (
 				01A7CCA32638946C00A5A40B /* Sources */,
 				01A7CCA42638946C00A5A40B /* Frameworks */,
@@ -237,9 +237,9 @@
 			);
 			dependencies = (
 			);
-			name = "Grocery_Tracker___ (macOS)";
+			name = "Grocery Tracker (macOS)";
 			productName = "Grocery_Tracker (macOS)";
-			productReference = 01A7CCA72638946C00A5A40B /* Grocery_Tracker___.app */;
+			productReference = 01A7CCA72638946C00A5A40B /* Grocery Tracker.app */;
 			productType = "com.apple.product-type.application";
 		};
 		01A7CCAE2638946C00A5A40B /* Tests iOS */ = {
@@ -303,7 +303,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 01A7CC932638946A00A5A40B /* Build configuration list for PBXProject "Grocery_Tracker___" */;
+			buildConfigurationList = 01A7CC932638946A00A5A40B /* Build configuration list for PBXProject "Grocery Tracker" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -316,8 +316,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				01A7CC9E2638946C00A5A40B /* Grocery_Tracker___ (iOS) */,
-				01A7CCA62638946C00A5A40B /* Grocery_Tracker___ (macOS) */,
+				01A7CC9E2638946C00A5A40B /* Grocery Tracker (iOS) */,
+				01A7CCA62638946C00A5A40B /* Grocery Tracker (macOS) */,
 				01A7CCAE2638946C00A5A40B /* Tests iOS */,
 				01A7CCB92638946C00A5A40B /* Tests macOS */,
 			);
@@ -411,12 +411,12 @@
 /* Begin PBXTargetDependency section */
 		01A7CCB12638946C00A5A40B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 01A7CC9E2638946C00A5A40B /* Grocery_Tracker___ (iOS) */;
+			target = 01A7CC9E2638946C00A5A40B /* Grocery Tracker (iOS) */;
 			targetProxy = 01A7CCB02638946C00A5A40B /* PBXContainerItemProxy */;
 		};
 		01A7CCBC2638946C00A5A40B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 01A7CCA62638946C00A5A40B /* Grocery_Tracker___ (macOS) */;
+			target = 01A7CCA62638946C00A5A40B /* Grocery Tracker (macOS) */;
 			targetProxy = 01A7CCBB2638946C00A5A40B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -548,7 +548,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "LAVA.Grocery-Tracker";
-				PRODUCT_NAME = "Grocery_Tracker___";
+				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -570,7 +570,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "LAVA.Grocery-Tracker";
-				PRODUCT_NAME = "Grocery_Tracker___";
+				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -597,7 +597,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LAVA.Grocery-Tracker";
-				PRODUCT_NAME = "Grocery_Tracker___";
+				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -622,7 +622,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LAVA.Grocery-Tracker";
-				PRODUCT_NAME = "Grocery_Tracker___";
+				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -720,7 +720,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		01A7CC932638946A00A5A40B /* Build configuration list for PBXProject "Grocery_Tracker___" */ = {
+		01A7CC932638946A00A5A40B /* Build configuration list for PBXProject "Grocery Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01A7CCCB2638946D00A5A40B /* Debug */,
@@ -729,7 +729,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01A7CCCD2638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery_Tracker___ (iOS)" */ = {
+		01A7CCCD2638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery Tracker (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01A7CCCE2638946D00A5A40B /* Debug */,
@@ -738,7 +738,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01A7CCD02638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery_Tracker___ (macOS)" */ = {
+		01A7CCD02638946D00A5A40B /* Build configuration list for PBXNativeTarget "Grocery Tracker (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01A7CCD12638946D00A5A40B /* Debug */,

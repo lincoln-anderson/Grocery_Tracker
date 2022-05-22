@@ -17,9 +17,9 @@ struct GroceryItemListView: View {
     
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.dateStyle = .short
+            formatter.dateFormat = "E, MMM d"
             return formatter
-        }()
+            }()
     
     var body: some View {
         HStack{
