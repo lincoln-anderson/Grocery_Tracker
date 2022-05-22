@@ -17,29 +17,29 @@ struct GroceryItemGridView: View {
     
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.dateFormat = "E, MMM d"
+            formatter.dateFormat = "MMM d"
             return formatter
         }()
     var body: some View {
         ScrollView{
-            HStack{
                 VStack{
                     Spacer()
                     VStack{
                         Text(passedGroceryItemName)
                             .font(.body)
                             .bold()
+                        Spacer()
                         VStack{
                             Text("Exp. Date:")
+                            Spacer()
                             Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
                         }
                     }
                     Spacer()
                 }
-            }
         }
-        .frame(minWidth: 150, idealWidth: 150, maxWidth: 150, minHeight: 75, idealHeight: 75, maxHeight: 75, alignment: .center)
-        .padding()
+        .frame(minWidth: 150, idealWidth: 150, maxWidth: 150, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+        .padding(.all)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(.blue, lineWidth: 4)
