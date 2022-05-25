@@ -41,7 +41,7 @@ struct GroceryItemGridView: View {
                     }
                 }
             }
-        .frame(minWidth: 150, idealWidth: 168, maxWidth: 170, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+        .frame(minWidth: 150, idealWidth: 168, maxWidth: 168, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
         .padding(.all)
         .overlay(
             RoundedRectangle(cornerRadius: 16)

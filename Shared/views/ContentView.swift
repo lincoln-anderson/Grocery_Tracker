@@ -26,18 +26,23 @@ struct ContentView: View {
     
 
     let columns = [
-        GridItem(.adaptive(minimum: 150))
+        GridItem(.adaptive(minimum: 180))
     ]
 
     var body: some View {
         
         VStack{
             ScrollView {
-                    LazyVGrid(columns: columns, spacing: 15) {
+                LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
+                    Section(header:
+                        Text("Today is: ")
+                        .font(.largeTitle)
+                    ) {
                         ForEach(groceryItems) { groceryItem in
                             GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
                     }
+                }
             }
             Spacer()
             
