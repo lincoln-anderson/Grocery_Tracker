@@ -33,7 +33,7 @@ struct ContentView: View {
         
         VStack{
             ScrollView {
-                    LazyVGrid(columns: columns, spacing: 20) {
+                    LazyVGrid(columns: columns, spacing: 15) {
                         ForEach(groceryItems) { groceryItem in
                             GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
@@ -48,13 +48,13 @@ struct ContentView: View {
                 Button(action: {self.showingRemoveSheet.toggle()}, label: {
                         Text("-")
                         .foregroundColor(colorScheme == .dark ? .white : .black)
-                        .font(.title2)
+                        .font(.largeTitle)
                         .fontWeight(.bold)
                         .frame(width: 80, height: 80)
                         .padding()
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
-                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 5)
+                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
                                 
                         )
                     
@@ -85,7 +85,7 @@ struct ContentView: View {
                             }, label: {
                                 Text("+")
                                     .foregroundColor(colorScheme == .dark ? .white : .black)
-                                    .font(.title2)
+                                    .font(.largeTitle)
                                     .fontWeight(.bold)
                                     .frame(width: 80, height: 80)
                                     .padding()

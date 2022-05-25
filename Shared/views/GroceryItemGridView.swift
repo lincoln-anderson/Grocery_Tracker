@@ -11,6 +11,8 @@ struct GroceryItemGridView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
+    @State private var availableWidth: CGFloat = 0
+    
     var passedGroceryItemName: String
     
     var passedGroceryItemExpirationDate: Date
@@ -23,29 +25,27 @@ struct GroceryItemGridView: View {
             return formatter
         }()
     var body: some View {
-        ScrollView{
-                VStack{
+            VStack{
+                Spacer()
+                VStack(spacing: 10){
+                    Text(passedGroceryItemName)
+                        .font(.title2)
+                        .bold()
                     Spacer()
-                    VStack(spacing: 10){
-                        Text(passedGroceryItemName)
-                            .font(.title2)
+                    HStack{
+                        Text("Exp. Date:")
                             .bold()
                         Spacer()
-                        HStack{
-                            Text("Exp. Date:")
-                                .bold()
-                            Spacer()
-                            Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
-                                .bold()
-                        }
+                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
+                            .bold()
                     }
                 }
-        }
-        .frame(minWidth: 180, idealWidth: 180, maxWidth: 180, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            }
+        .frame(minWidth: 150, idealWidth: 168, maxWidth: 170, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
         .padding(.all)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 10)
+                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
         )
         
     }
