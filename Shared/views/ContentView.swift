@@ -35,10 +35,19 @@ struct ContentView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
                     Section(header:
-                        Text("Today is: ")
-                        .font(.largeTitle)
+                                Text("These \(getWithinWeek(groceryItems: groceryItems).count) will items expire within 7 days").bold()
+                        .font(.title3)
                     ) {
-                        ForEach(groceryItems) { groceryItem in
+                        ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                            GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                        }
+                    }
+                    
+                    Section(header:
+                                Text("These \(getNotWithinWeek(groceryItems: groceryItems).count) expire after more than 7 days").bold()
+                        .font(.title2)
+                    ) {
+                        ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
                             GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
                     }
@@ -143,6 +152,30 @@ private let groceryItemFormatter: DateFormatter = {
     formatter.timeStyle = .medium
     return formatter
 }()
+
+func getWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
+    var weekArray: [GroceryItem] = []
+    
+    for item in groceryItems {
+        if item.expirationDate?.isInSevenDays() == true {
+            weekArray.append(item)
+        }
+    }
+    
+    return weekArray
+}
+
+func getNotWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
+    var weekArray: [GroceryItem] = []
+    
+    for item in groceryItems {
+        if item.expirationDate?.isInSevenDays() == false {
+            weekArray.append(item)
+        }
+    }
+    
+    return weekArray
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
