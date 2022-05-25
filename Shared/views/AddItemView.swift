@@ -20,6 +20,10 @@ struct AddItemView: View {
     
     @State var purchaseDate: Date
     
+    @State var sendNotification: Bool = true
+    
+    @State var notificationTime: Int = 3
+    
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "E, MMM d"
@@ -30,7 +34,7 @@ struct AddItemView: View {
         VStack{
             
             Spacer()
-            VStack{
+            VStack(spacing: 25){
                 Text("New Grocery Item")
                     .font(.largeTitle)
                     .bold()
@@ -41,53 +45,76 @@ struct AddItemView: View {
                 
                 Spacer()
                 
-                DatePicker("Purchase Date:", selection: $purchaseDate, displayedComponents: .date)
+                DatePicker("Purchase Date", selection: $purchaseDate, displayedComponents: .date)
                     .padding(.horizontal)
                     .font(.largeTitle)
                 
-                DatePicker("Expiration Date:", selection: $expirationDate, displayedComponents: .date)
+                DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: .date)
                     .padding(.horizontal)
                     .font(.largeTitle)
+                Toggle("Expiration Notication", isOn: $sendNotification)
+                    .padding(.horizontal)
+                    .font(.largeTitle)
+                Text("Choose number of days before expiration notification is sent")
+                    .font(.title2)
+                    .padding(.horizontal)
+                    .multilineTextAlignment(.center)
+                Picker("days before exipring to get notification", selection: $notificationTime, content: {
+                    Text("1").tag(1)
+                    Text("2").tag(2)
+                    Text("3").tag(3)
+                    Text("4").tag(4)
+                    Text("5").tag(5)
+                }).pickerStyle(WheelPickerStyle())
+                .foregroundColor(colorScheme == .dark ? .white : .black)
+                .font(.largeTitle)
                 
                 Spacer()
                 Button(action: {
                     
-                    let content = UNMutableNotificationContent()
-                    content.title = "\(newName) expires soon!"
+                    if sendNotification == true {
                     
-                    let formattedDate = AddItemView.DateFormat.string(from: self.expirationDate)
-                    content.subtitle = "Expiration Date \(formattedDate)";
-                    content.sound = UNNotificationSound.default
-                    
-                    var dateComponents = DateComponents()
-                    
-                    dateComponents.hour = 11
-                    
-                    dateComponents.minute = 06
-                    
-                    let newDateFormatter = DateFormatter()
-                    newDateFormatter.dateFormat = "MM"
-                    
-                    dateComponents.month = Int(newDateFormatter.string(from: expirationDate))
-                    
-                    newDateFormatter.dateFormat = "yyyy"
-                    
-                    dateComponents.year = Int(newDateFormatter.string(from: expirationDate))
-                    
-                    newDateFormatter.dateFormat = "dd"
-                    
-                    dateComponents.day = (Int(newDateFormatter.string(from: expirationDate)) ?? 0) - 3
+                        let content = UNMutableNotificationContent()
+                        content.title = "\(newName) expires soon!"
+                        
+                        let formattedDate = AddItemView.DateFormat.string(from: self.expirationDate)
+                        content.subtitle = "Expiration Date \(formattedDate)";
+                        content.sound = UNNotificationSound.default
+                        
+                        var dateComponents = DateComponents()
+                        
+                        dateComponents.hour = 8
+                        
+                        dateComponents.minute = 00
+                        
+                        let newDateFormatter = DateFormatter()
+                        newDateFormatter.dateFormat = "MM"
+                        
+                        dateComponents.month = Int(newDateFormatter.string(from: expirationDate))
+                        
+                        newDateFormatter.dateFormat = "yyyy"
+                        
+                        dateComponents.year = Int(newDateFormatter.string(from: expirationDate))
+                        
+                        newDateFormatter.dateFormat = "dd"
+                        
+                        dateComponents.day = (Int(newDateFormatter.string(from: expirationDate)) ?? 0) - notificationTime
 
-                    // show this notification five seconds from now
-                    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+                        // show this notification five seconds from now
+                        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
 
-                    // choose a random identifier
-                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                        // choose a random identifier
+                        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
-                    // add our notification request
-                    UNUserNotificationCenter.current().add(request)
-                    newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate)
-                    self.isPresented = false
+                        // add our notification request
+                        UNUserNotificationCenter.current().add(request)
+                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate)
+                        self.isPresented = false
+                        
+                    } else {
+                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate)
+                        self.isPresented = false
+                    }
                     
                 }, label: {
                     Text("Save Item")
@@ -102,7 +129,6 @@ struct AddItemView: View {
                         )
 
                 })
-                Spacer()
                 
             }
             
