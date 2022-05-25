@@ -35,7 +35,7 @@ struct ContentView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
                     Section(header:
-                                Text("These \(getWithinWeek(groceryItems: groceryItems).count) will items expire within 7 days").bold()
+                                Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days").bold()
                         .font(.title3)
                     ) {
                         ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
