@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0143D56E283EB7C100FACB18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0143D56D283EB7C100FACB18 /* Assets.xcassets */; };
 		01A7CCB42638946C00A5A40B /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCB32638946C00A5A40B /* Tests_iOS.swift */; };
 		01A7CCBF2638946C00A5A40B /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCBE2638946C00A5A40B /* Tests_macOS.swift */; };
 		01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */; };
@@ -17,8 +18,6 @@
 		01A7CCC62638946D00A5A40B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC982638946A00A5A40B /* ContentView.swift */; };
 		01A7CCC72638946D00A5A40B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC992638946A00A5A40B /* Persistence.swift */; };
 		01A7CCC82638946D00A5A40B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC992638946A00A5A40B /* Persistence.swift */; };
-		01A7CCC92638946D00A5A40B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01A7CC9A2638946C00A5A40B /* Assets.xcassets */; };
-		01A7CCCA2638946D00A5A40B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01A7CC9A2638946C00A5A40B /* Assets.xcassets */; };
 		01A7CCDA2638A02200A5A40B /* GroceryItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCD92638A02200A5A40B /* GroceryItemListView.swift */; };
 		01A7CCDB2638A02200A5A40B /* GroceryItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCD92638A02200A5A40B /* GroceryItemListView.swift */; };
 		01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCDC2639943300A5A40B /* AddItemView.swift */; };
@@ -49,11 +48,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0143D56D283EB7C100FACB18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../../../Downloads/AppIcons-2/Assets.xcassets"; sourceTree = "<group>"; };
+		0143D56F283EB84A00FACB18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../../../../Downloads/AppIcons-2/Assets.xcassets"; sourceTree = "<group>"; };
 		01A7CC962638946A00A5A40B /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grocery_TrackerApp.swift; sourceTree = "<group>"; };
 		01A7CC982638946A00A5A40B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		01A7CC992638946A00A5A40B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		01A7CC9A2638946C00A5A40B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01A7CC9F2638946C00A5A40B /* Grocery Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A7CCA22638946C00A5A40B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01A7CCA72638946C00A5A40B /* Grocery Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +108,7 @@
 		01A7CC8F2638946A00A5A40B = {
 			isa = PBXGroup;
 			children = (
+				0143D56D283EB7C100FACB18 /* Assets.xcassets */,
 				01A7CC942638946A00A5A40B /* Shared */,
 				01A7CCA12638946C00A5A40B /* iOS */,
 				01A7CCA82638946C00A5A40B /* macOS */,
@@ -120,10 +121,10 @@
 		01A7CC942638946A00A5A40B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				0143D56F283EB84A00FACB18 /* Assets.xcassets */,
 				01A7CCE12639948200A5A40B /* appframework */,
 				01A7CCE02639945D00A5A40B /* dataStructures */,
 				01A7CCDF2639944500A5A40B /* views */,
-				01A7CC9A2638946C00A5A40B /* Assets.xcassets */,
 				01CAF0D4266FB440001B5371 /* GroceryTrackerDocumentation  .md */,
 			);
 			path = Shared;
@@ -329,7 +330,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01A7CCC92638946D00A5A40B /* Assets.xcassets in Resources */,
+				0143D56E283EB7C100FACB18 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,7 +338,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01A7CCCA2638946D00A5A40B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,7 +547,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "LAVA.Grocery-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = SproutsGroceryTracker;
 				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -569,7 +569,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "LAVA.Grocery-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = SproutsGroceryTracker;
 				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;

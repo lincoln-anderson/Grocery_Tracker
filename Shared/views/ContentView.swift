@@ -11,6 +11,7 @@ import UserNotifications
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) var colorScheme
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.expirationDate, ascending: true)],
@@ -32,12 +33,11 @@ struct ContentView: View {
         
         VStack{
             ScrollView {
-                    LazyVGrid(columns: columns, spacing: 1) {
+                    LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(groceryItems) { groceryItem in
                             GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                         }
                     }
-                    .padding(.horizontal)
             }
             Spacer()
             
@@ -47,10 +47,16 @@ struct ContentView: View {
             
                 Button(action: {self.showingRemoveSheet.toggle()}, label: {
                         Text("-")
-                            .font(.largeTitle)
-                            .frame(width: 100, height: 100)
-                            .background(Color(hex: "404040"))
-                            .clipShape(Circle())
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .frame(width: 80, height: 80)
+                        .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 5)
+                                
+                        )
                     
                 })
                     .sheet(isPresented: $showingRemoveSheet, onDismiss: {
@@ -78,10 +84,16 @@ struct ContentView: View {
                 
                             }, label: {
                                 Text("+")
-                                    .font(.largeTitle)
-                                    .frame(width: 100, height: 100)
-                                    .background(Color(hex: "404040"))
-                                    .clipShape(Circle())
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .frame(width: 80, height: 80)
+                                    .padding()
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .stroke(colorScheme == .dark ? .white : .black, lineWidth: 5)
+                                            
+                                    )
                             })
                             .sheet(isPresented: $showingAddSheet, onDismiss: {
                 

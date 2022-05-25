@@ -10,6 +10,7 @@ import SwiftUI
 struct AddItemView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) var colorScheme
     
     @Binding var isPresented: Bool
     
@@ -29,25 +30,25 @@ struct AddItemView: View {
         VStack{
             
             Spacer()
-            Text("New Grocery Item")
-                .font(.largeTitle)
-            
-            
             VStack{
-            
+                Text("New Grocery Item")
+                    .font(.largeTitle)
+                    .bold()
+                
                 TextField("New Item Name", text: $newName)
                     .padding(.horizontal)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 Spacer()
                 
-                DatePicker("Purchase Date", selection: $purchaseDate, displayedComponents: .date)
+                DatePicker("Purchase Date:", selection: $purchaseDate, displayedComponents: .date)
                     .padding(.horizontal)
+                    .font(.largeTitle)
                 
-                Spacer()
-                
-                DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: .date)
+                DatePicker("Expiration Date:", selection: $expirationDate, displayedComponents: .date)
                     .padding(.horizontal)
+                    .font(.largeTitle)
+                
                 Spacer()
                 Button(action: {
                     
@@ -90,11 +91,21 @@ struct AddItemView: View {
                     
                 }, label: {
                     Text("Save Item")
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 5)
+                                
+                        )
 
-                        .font(.title)
                 })
+                Spacer()
                 
             }
+            
                 
         }
     }
