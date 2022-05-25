@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0144A844283EBEE400F36D0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0144A843283EBEE400F36D0C /* Assets.xcassets */; };
 		0144A845283EBEE400F36D0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0144A843283EBEE400F36D0C /* Assets.xcassets */; };
+		0144A847283ED27E00F36D0C /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144A846283ED27E00F36D0C /* DateExtension.swift */; };
+		0144A848283ED27E00F36D0C /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144A846283ED27E00F36D0C /* DateExtension.swift */; };
 		01A7CCB42638946C00A5A40B /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCB32638946C00A5A40B /* Tests_iOS.swift */; };
 		01A7CCBF2638946C00A5A40B /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCBE2638946C00A5A40B /* Tests_macOS.swift */; };
 		01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */; };
@@ -50,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		0144A843283EBEE400F36D0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0144A846283ED27E00F36D0C /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		01A7CC962638946A00A5A40B /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grocery_TrackerApp.swift; sourceTree = "<group>"; };
 		01A7CC982638946A00A5A40B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -191,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				01A7CCE526407D9100A5A40B /* HexColorExtension.swift */,
+				0144A846283ED27E00F36D0C /* DateExtension.swift */,
 				01A7CC992638946A00A5A40B /* Persistence.swift */,
 				01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */,
 			);
@@ -363,6 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01A7CCC32638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
+				0144A847283ED27E00F36D0C /* DateExtension.swift in Sources */,
 				01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */,
 				01A7CCE32640755600A5A40B /* UsedGroceryView.swift in Sources */,
 				01A7CCE626407D9100A5A40B /* HexColorExtension.swift in Sources */,
@@ -379,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01A7CCC42638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
+				0144A848283ED27E00F36D0C /* DateExtension.swift in Sources */,
 				01A7CCDE2639943300A5A40B /* AddItemView.swift in Sources */,
 				01A7CCE42640755600A5A40B /* UsedGroceryView.swift in Sources */,
 				01A7CCE726407D9100A5A40B /* HexColorExtension.swift in Sources */,
