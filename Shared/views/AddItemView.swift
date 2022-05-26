@@ -34,10 +34,11 @@ struct AddItemView: View {
         VStack{
             
             Spacer()
-            VStack(spacing: 25){
+            VStack(spacing: 20){
                 Text("New Grocery Item")
                     .font(.largeTitle)
                     .bold()
+                    .padding(.vertical)
                 
                 TextField("New Item Name", text: $newName)
                     .padding(.horizontal)
@@ -70,11 +71,10 @@ struct AddItemView: View {
                     Text("3").tag(3)
                     Text("4").tag(4)
                     Text("5").tag(5)
-                }).pickerStyle(WheelPickerStyle())
+                }).pickerStyle(.segmented)
                 .foregroundColor(colorScheme == .dark ? .white : .black)
-                .font(.largeTitle)
-                
-                Spacer()
+                .font(.title)
+                .padding(.horizontal)
                 Button(action: {
                     
                     if sendNotification == true {
