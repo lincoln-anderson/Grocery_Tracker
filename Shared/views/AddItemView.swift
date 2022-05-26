@@ -52,9 +52,14 @@ struct AddItemView: View {
                 DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: .date)
                     .padding(.horizontal)
                     .font(.largeTitle)
-                Toggle("Expiration Notication", isOn: $sendNotification)
-                    .padding(.horizontal)
-                    .font(.largeTitle)
+                if #available(iOS 15.0, *) {
+                    Toggle("Expiration Notication", isOn: $sendNotification)
+                        .padding(.horizontal)
+                        .font(.largeTitle)
+                        .tint(colorScheme == .dark ? .white : .black)
+                } else {
+                    // Fallback on earlier versions
+                }
                 Text("Choose number of days before expiration notification is sent")
                     .font(.title2)
                     .padding(.horizontal)
@@ -161,6 +166,11 @@ struct AddItemView_Previews: PreviewProvider {
     @State static var newName = ""
     @State static var date = Date()
     static var previews: some View {
-        AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date)
+        Group {
+            AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date)
+                .preferredColorScheme(.dark)
+            AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date)
+                .preferredColorScheme(.light)
+        }
     }
 }

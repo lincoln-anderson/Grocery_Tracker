@@ -13,7 +13,7 @@ struct PersistenceController {
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<8 {
+        for _ in 0..<0 {
             let newItem = GroceryItem(context: viewContext)
             newItem.name = "sample"
             newItem.purchasedDate = Date()

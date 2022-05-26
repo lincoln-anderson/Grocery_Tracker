@@ -34,21 +34,24 @@ struct ContentView: View {
         VStack{
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                    Section(header:
-                                Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days").bold()
-                        .font(.title3)
-                    ) {
-                        ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                            GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                    if getWithinWeek(groceryItems: groceryItems).count > 0 {
+                        Section(header:
+                                    Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days").bold()
+                            .font(.title3)
+                        ) {
+                            ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                                GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                            }
                         }
                     }
-                    
-                    Section(header:
-                                Text("These \(getNotWithinWeek(groceryItems: groceryItems).count) expire after more than 7 days").bold()
-                        .font(.title2)
-                    ) {
-                        ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                            GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                    if getNotWithinWeek(groceryItems: groceryItems).count > 0 {
+                        Section(header:
+                                    Text("These \(getNotWithinWeek(groceryItems: groceryItems).count) expire after more than 7 days").bold()
+                            .font(.title2)
+                        ) {
+                            ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                                GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                            }
                         }
                     }
                 }
