@@ -25,12 +25,14 @@ struct UsedGroceryView: View {
         VStack{
             if #available(iOS 15.0, *) {
                 List() {
-                    ForEach(groceryItems) { groceryItem in
-                        GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                    }
+                    Section(header: myHeader()) {
+                        ForEach(groceryItems) { groceryItem in
+                            GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                        }
                     
                     .onDelete(perform: deleteItems)
-                }
+                    }
+                }.environment(\.defaultMinListRowHeight, 100)
             } else {
                 // Fallback on earlier versions
             }
@@ -61,5 +63,13 @@ struct UsedGroceryView_Previews: PreviewProvider {
     
     static var previews: some View {
         UsedGroceryView(isPresented: $isShowing, filterString: $testString)
+    }
+}
+
+struct myHeader: View {
+    var body: some View {
+        HStack {
+            Text("Swipe left to delete")
+        }
     }
 }

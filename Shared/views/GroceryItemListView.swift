@@ -22,17 +22,19 @@ struct GroceryItemListView: View {
             }()
     
     var body: some View {
-        HStack{
-            Text(passedGroceryItemName)
-                .bold()
+        VStack(alignment: .center){
             Spacer()
-            VStack{
-                Text("Purchased Date \(self.passedGroceryItemPurchasedDate, formatter: GroceryItemListView.DateFormat)")
+            HStack(alignment: .center) {
+                Text(passedGroceryItemName)
+                    .font(.title)
+                    .bold()
                 Spacer()
-                Text("Expiration Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
+                VStack{
+                    Text("Exp. Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
+                        .bold()
+                }
             }
         }
-        
     }
 }
 
@@ -43,7 +45,6 @@ struct GroceryItemListView_Previews: PreviewProvider {
     static var previews: some View {
         let item = GroceryItem(context: viewContext)
         item.expirationDate = Date()
-        item.purchasedDate = Date()
         item.name = "Sample"
         
         return GroceryItemListView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
