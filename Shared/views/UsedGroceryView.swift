@@ -32,7 +32,7 @@ struct UsedGroceryView: View {
                     
                     .onDelete(perform: deleteItems)
                     }
-                }.environment(\.defaultMinListRowHeight, 80)
+                }.environment(\.defaultMinListRowHeight, 100)
             } else {
                 // Fallback on earlier versions
             }
