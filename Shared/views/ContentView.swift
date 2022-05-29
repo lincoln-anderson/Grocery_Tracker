@@ -54,6 +54,20 @@ struct ContentView: View {
                             }
                         }
                     }
+                    
+                    if getExpired(groceryItems: groceryItems).count > 0 {
+                        let _ = print(getExpired(groceryItems: groceryItems).count)
+                        Section(header:
+                                    Text("These \(getNotWithinWeek(groceryItems: groceryItems).count) Have expired!").bold()
+                            .font(.title2)
+                            .foregroundColor(.red)
+
+                        ) {
+                            ForEach(getExpired(groceryItems: groceryItems)) { groceryItem in
+                                GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                            }
+                        }
+                    }
                 }
             }
             Spacer()
@@ -171,11 +185,29 @@ func getWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
 func getNotWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     var weekArray: [GroceryItem] = []
     
+    let currentDate = Date()
+    
     for item in groceryItems {
-        if item.expirationDate?.isInSevenDays() == false {
+        if item.expirationDate?.isInSevenDays() == false && item.expirationDate! > currentDate {
             weekArray.append(item)
         }
     }
+    
+    return weekArray
+}
+
+func getExpired(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
+    var weekArray: [GroceryItem] = []
+    
+    let currentDate = Date()
+    
+    for item in groceryItems {
+        if item.expirationDate! < currentDate && item.expirationDate! != Date() {
+            weekArray.append(item)
+        }
+    }
+    
+    let _ = print("String(getExpired(groceryItems: groceryItems).count)")
     
     return weekArray
 }

@@ -25,6 +25,7 @@ struct GroceryItemGridView: View {
             return formatter
         }()
     var body: some View {
+        if passedGroceryItemExpirationDate > Date() {
             VStack{
                 Spacer()
                 VStack(spacing: 10){
@@ -41,12 +42,41 @@ struct GroceryItemGridView: View {
                     }
                 }
             }
-        .frame(minWidth: 150, idealWidth: 168, maxWidth: 168, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
-        .padding(.all)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
-        )
+            .frame(minWidth: 150, idealWidth: 168, maxWidth: 168, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .padding(.all)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
+            )
+            
+        } else {
+            VStack{
+                Spacer()
+                VStack(spacing: 10){
+                    Text(passedGroceryItemName)
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.red)
+                    Spacer()
+                    HStack{
+                        Text("Exp.")
+                            .bold()
+                            .foregroundColor(.red)
+
+                        Spacer()
+                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
+                            .bold()
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+            .frame(minWidth: 150, idealWidth: 168, maxWidth: 168, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .padding(.all)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(.red, lineWidth: 6)
+            )
+        }
         
     }
 }
