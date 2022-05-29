@@ -21,7 +21,7 @@ struct GroceryItemGridView: View {
     
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.dateFormat = "MMM d"
+            formatter.dateFormat = "E, MMM d"
             return formatter
         }()
     var body: some View {
@@ -33,7 +33,7 @@ struct GroceryItemGridView: View {
                         .bold()
                     Spacer()
                     HStack{
-                        Text("Exp. Date:")
+                        Text("Exp.")
                             .bold()
                         Spacer()
                         Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)

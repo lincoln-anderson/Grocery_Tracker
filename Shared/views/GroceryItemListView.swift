@@ -22,9 +22,9 @@ struct GroceryItemListView: View {
             }()
     
     var body: some View {
-        VStack(alignment: .center){
+        VStack{
             Spacer()
-            HStack(alignment: .center) {
+            HStack{
                 Text(passedGroceryItemName)
                     .font(.title)
                     .bold()
