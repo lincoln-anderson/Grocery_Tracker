@@ -26,8 +26,10 @@ struct GroceryItemListView: View {
             Spacer()
             HStack{
                 Text(passedGroceryItemName)
+                    .foregroundColor(!(isExpired(expirationDate: passedGroceryItemExpirationDate)) ? .black : .red)
                     .font(.title)
                     .bold()
+                    
                 Spacer()
                 VStack{
                     Text("Exp. Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
@@ -36,6 +38,11 @@ struct GroceryItemListView: View {
             }
         }
     }
+}
+
+func isExpired(expirationDate: Date) -> Bool {
+    let isExpiredBool = expirationDate <= Date() && !isSameDay(date1: Date(), date2: expirationDate)
+    return isExpiredBool
 }
 
 struct GroceryItemListView_Previews: PreviewProvider {

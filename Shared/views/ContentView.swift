@@ -216,11 +216,10 @@ func getWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     let currentDate = Date()
     
     for item in groceryItems {
-        if item.expirationDate?.isInSevenDays() == true && item.expirationDate! == currentDate {
+        if item.expirationDate?.isInSevenDays() == true && isSameDay(date1: currentDate, date2: item.expirationDate!) {
             weekArray.append(item)
         }
     }
-    print(weekArray.count)
     return weekArray
 }
 
@@ -234,7 +233,6 @@ func getNotWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem
             weekArray.append(item)
         }
     }
-    print(weekArray.count)
     return weekArray
 }
 
@@ -244,14 +242,21 @@ func getExpired(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     let currentDate = Date()
     
     for item in groceryItems {
-        if item.expirationDate! < currentDate && item.expirationDate! != Date() {
+        if item.expirationDate! < currentDate && !isSameDay(date1: currentDate, date2: item.expirationDate!) {
             weekArray.append(item)
         }
     }
     
-    let _ = print("String(getExpired(groceryItems: groceryItems).count)")
-    
     return weekArray
+}
+
+func isSameDay(date1: Date, date2: Date) -> Bool {
+    let diff = Calendar.current.dateComponents([.day], from: date1, to: date2)
+    if diff.day == 0 {
+        return true
+    } else {
+        return false
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

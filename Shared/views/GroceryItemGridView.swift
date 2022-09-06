@@ -25,7 +25,7 @@ struct GroceryItemGridView: View {
             return formatter
         }()
     var body: some View {
-        if passedGroceryItemExpirationDate > Date() {
+        if passedGroceryItemExpirationDate >= Date() || isSameDay(date1: interval, date2: passedGroceryItemExpirationDate) {
             VStack{
                 Spacer()
                 VStack(spacing: 10){
