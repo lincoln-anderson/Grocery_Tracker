@@ -75,6 +75,7 @@ struct AddItemView: View {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .font(.title)
                 .padding(.horizontal)
+                Spacer()
                 Button(action: {
                     
                     if sendNotification == true {

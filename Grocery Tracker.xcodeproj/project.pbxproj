@@ -31,6 +31,7 @@
 		01A7CCE726407D9100A5A40B /* HexColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCE526407D9100A5A40B /* HexColorExtension.swift */; };
 		01A7CCEF2641993700A5A40B /* GroceryItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCEE2641993700A5A40B /* GroceryItemGridView.swift */; };
 		01A7CCF02641993700A5A40B /* GroceryItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCEE2641993700A5A40B /* GroceryItemGridView.swift */; };
+		01F2DA7128477B9C001371C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F2DA7028477B9C001371C9 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,8 @@
 		01A7CCE526407D9100A5A40B /* HexColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexColorExtension.swift; sourceTree = "<group>"; };
 		01A7CCEE2641993700A5A40B /* GroceryItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItemGridView.swift; sourceTree = "<group>"; };
 		01CAF0D4266FB440001B5371 /* GroceryTrackerDocumentation  .md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "GroceryTrackerDocumentation  .md"; sourceTree = "<group>"; };
+		01F2DA6E28477B99001371C9 /* Grocery Tracker (iOS)Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Grocery Tracker (iOS)Debug.entitlements"; sourceTree = "<group>"; };
+		01F2DA7028477B9C001371C9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.5.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01F2DA7128477B9C001371C9 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +115,7 @@
 		01A7CC8F2638946A00A5A40B = {
 			isa = PBXGroup;
 			children = (
+				01F2DA6E28477B99001371C9 /* Grocery Tracker (iOS)Debug.entitlements */,
 				0144A843283EBEE400F36D0C /* Assets.xcassets */,
 				01A7CC942638946A00A5A40B /* Shared */,
 				01A7CCA12638946C00A5A40B /* iOS */,
@@ -118,6 +123,7 @@
 				01A7CCB22638946C00A5A40B /* Tests iOS */,
 				01A7CCBD2638946C00A5A40B /* Tests macOS */,
 				01A7CCA02638946C00A5A40B /* Products */,
+				01F2DA6F28477B9C001371C9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -207,6 +213,14 @@
 				01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */,
 			);
 			path = appframework;
+			sourceTree = "<group>";
+		};
+		01F2DA6F28477B9C001371C9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				01F2DA7028477B9C001371C9 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -545,6 +559,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Grocery Tracker (iOS)Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9VS7Z57592;
 				ENABLE_PREVIEWS = YES;
