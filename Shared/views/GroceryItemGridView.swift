@@ -11,11 +11,11 @@ struct GroceryItemGridView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @State private var availableWidth: CGFloat = 0
-    
     var passedGroceryItemName: String
     
     var passedGroceryItemExpirationDate: Date
+    
+    var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
     
     let interval = Date()
     
@@ -42,7 +42,7 @@ struct GroceryItemGridView: View {
                     }
                 }
             }
-            .frame(minWidth: 150, idealWidth: 168, maxWidth: 168, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
             .padding(.all)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)

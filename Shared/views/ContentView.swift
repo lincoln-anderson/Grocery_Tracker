@@ -24,6 +24,8 @@ struct ContentView: View {
     
     @State var testString = "string"
     
+    var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
+    
 
     let columns = [
         GridItem(.adaptive(minimum: 180))
@@ -112,35 +114,11 @@ struct ContentView: View {
             }
             Spacer()
             
-            HStack{
+            VStack{
                 
                 Spacer()
             
-                Button(action: {self.showingRemoveSheet.toggle()}, label: {
-                        Text("-")
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .frame(width: 80, height: 80)
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
-                                
-                        )
-                    
-                })
-                    .sheet(isPresented: $showingRemoveSheet, onDismiss: {
-        
-                        showingAddSheet = false
-        
-                    }) {
-        
-                        UsedGroceryView(isPresented: $showingRemoveSheet, filterString: $testString).environment(\.managedObjectContext, self.viewContext)
-        
-                    }
                 
-                Spacer()
                 
                 Button(action: {
                                     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
@@ -154,11 +132,11 @@ struct ContentView: View {
                                     self.showingAddSheet.toggle()
                 
                             }, label: {
-                                Text("+")
+                                Text("Add Item")
                                     .foregroundColor(colorScheme == .dark ? .white : .black)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
-                                    .frame(width: 80, height: 80)
+                                    .frame(width: containerWidth * 0.85, height: 40)
                                     .padding()
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 15)
@@ -176,7 +154,29 @@ struct ContentView: View {
                 
                             }
                 
-                Spacer()
+                Button(action: {self.showingRemoveSheet.toggle()}, label: {
+                        Text("Delete Item")
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .frame(width: containerWidth * 0.85, height: 40)
+                        .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
+                                
+                        )
+                    
+                })
+                    .sheet(isPresented: $showingRemoveSheet, onDismiss: {
+        
+                        showingAddSheet = false
+        
+                    }) {
+        
+                        UsedGroceryView(isPresented: $showingRemoveSheet, filterString: $testString).environment(\.managedObjectContext, self.viewContext)
+        
+                    }
             
             }
         }
