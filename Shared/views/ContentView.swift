@@ -35,54 +35,13 @@ struct ContentView: View {
         
         VStack{
             ScrollView {
+                if groceryItems.count == 0 {
+                    Text("Tap the \"Add Item\" button to add your groceries and begin tracking the expiration dates").bold()
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                }
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                    if getWithinWeek(groceryItems: groceryItems).count > 0 {
-                        if getWithinWeek(groceryItems: groceryItems).count == 1 {
-                            Section(header:
-                                        Text("This \(getWithinWeek(groceryItems: groceryItems).count) item will expire within 7 days").bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            ) {
-                                ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                                }
-                            }
-                        } else {
-                            Section(header:
-                                        Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days").bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            ) {
-                                ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                                }
-                            }
-                        }
-                    }
-                    if getNotWithinWeek(groceryItems: groceryItems).count >= 0 {
-                        if getNotWithinWeek(groceryItems: groceryItems).count == 1 {
-                            Section(header:
-                                        Text("This \(getNotWithinWeek(groceryItems: groceryItems).count) item will expire in more than 7 days").bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            ) {
-                                ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                                }
-                            }
-                        } else {
-                            Section(header:
-                                        Text("These \(getNotWithinWeek(groceryItems: groceryItems).count) expire after more than 7 days").bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            ) {
-                                ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                                }
-                            }
-                        }
-                    }
-                    
+                    //is expired
                     if getExpired(groceryItems: groceryItems).count > 0 {
                         if getExpired(groceryItems: groceryItems).count == 1 {
                             Section(header:
@@ -110,13 +69,86 @@ struct ContentView: View {
                             }
                         }
                     }
+                    // expires today section
+                    if isToday(groceryItems: groceryItems).count > 0 {
+                        if isToday(groceryItems: groceryItems).count == 1 {
+                            Section(header:
+                                        Text("This 1 item expires today").bold()
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            ) {
+                                ForEach(isToday(groceryItems: groceryItems)) { groceryItem in
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                }
+                            }
+                        } else {
+                            Section(header:
+                                        Text("These \(isToday(groceryItems: groceryItems).count) items expire today").bold()
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            ) {
+                                ForEach(isToday(groceryItems: groceryItems)) { groceryItem in
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                }
+                            }
+                        }
+                    }
+                    
+                    //expires within week section
+                    if getWithinWeek(groceryItems: groceryItems).count > 0 {
+                        if getWithinWeek(groceryItems: groceryItems).count == 1 {
+                            Section(header:
+                                        Text("This 1 item will expire within 7 days").bold()
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            ) {
+                                ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                }
+                            }
+                        } else {
+                            Section(header:
+                                        Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days").bold()
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            ) {
+                                ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                }
+                            }
+                        }
+                    }
+                    
+                    //expires after 7 days
+                    if getNotWithinWeek(groceryItems: groceryItems).count > 0 {
+                        if getNotWithinWeek(groceryItems: groceryItems).count == 1 {
+                            Section(header:
+                                        Text("This \(getNotWithinWeek(groceryItems: groceryItems).count) item will expire in more than 7 days").bold()
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            ) {
+                                ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                }
+                            }
+                        } else {
+                            Section(header:
+                                        Text("These \(getNotWithinWeek(groceryItems: groceryItems).count) items expire after more than 7 days").bold()
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            ) {
+                                ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                }
+                            }
+                        }
+                    }
+                    
                 }
             }
             Spacer()
             
             VStack{
-                
-                Spacer()
             
                 
                 
@@ -136,7 +168,7 @@ struct ContentView: View {
                                     .foregroundColor(colorScheme == .dark ? .white : .black)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
-                                    .frame(width: containerWidth * 0.85, height: 40)
+                                    .frame(width: containerWidth * 0.95, height: 40)
                                     .padding()
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 15)
@@ -159,7 +191,7 @@ struct ContentView: View {
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .frame(width: containerWidth * 0.85, height: 40)
+                        .frame(width: containerWidth * 0.95, height: 40)
                         .padding()
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
@@ -213,10 +245,13 @@ private let groceryItemFormatter: DateFormatter = {
 func getWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     var weekArray: [GroceryItem] = []
     
-    let currentDate = Date()
+    let currentDate = Date().addingTimeInterval(86400)
+    let outerRange = Date().addingTimeInterval(604800)
+    
+    let range = currentDate...outerRange
     
     for item in groceryItems {
-        if item.expirationDate?.isInSevenDays() == true && isSameDay(date1: currentDate, date2: item.expirationDate!) {
+        if range.contains(item.expirationDate!){
             weekArray.append(item)
         }
     }
@@ -233,6 +268,7 @@ func getNotWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem
             weekArray.append(item)
         }
     }
+    print(weekArray.count)
     return weekArray
 }
 
@@ -257,6 +293,21 @@ func isSameDay(date1: Date, date2: Date) -> Bool {
     } else {
         return false
     }
+}
+    
+func isToday(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
+    var weekArray: [GroceryItem] = []
+    
+    for item in groceryItems {
+        let diff = Calendar.current.dateComponents([.day], from: Date(), to: item.expirationDate!)
+        
+        if diff.day == 0 {
+            weekArray.append(item)
+        }
+    }
+    
+    return weekArray
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

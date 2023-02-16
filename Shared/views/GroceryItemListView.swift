@@ -26,7 +26,7 @@ struct GroceryItemListView: View {
             Spacer()
             HStack{
                 Text(passedGroceryItemName)
-                    .foregroundColor(!(isExpired(expirationDate: passedGroceryItemExpirationDate)) ? .black : .red)
+                    .foregroundColor(!(isExpired(expirationDate: passedGroceryItemExpirationDate)) ? .white : .red)
                     .font(.title)
                     .bold()
                     
