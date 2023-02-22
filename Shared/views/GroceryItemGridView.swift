@@ -32,6 +32,10 @@ struct GroceryItemGridView: View {
                     Text(passedGroceryItemName)
                         .font(.title2)
                         .bold()
+                        .frame(width: containerWidth)
+                        .scaledToFill()
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
                     Spacer()
                     HStack{
                         Text("Exp.")
