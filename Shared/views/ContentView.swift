@@ -26,6 +26,8 @@ struct ContentView: View {
     
     var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
     
+    var containerHeight:CGFloat = UIScreen.main.bounds.height
+    
 
     let columns = [
         GridItem(.adaptive(minimum: 180))
@@ -211,6 +213,10 @@ struct ContentView: View {
                     }
             
             }
+            if containerHeight < 1000 {
+                Spacer()
+            }
+                
         }
     }
 

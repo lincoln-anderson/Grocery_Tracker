@@ -24,6 +24,8 @@ struct AddItemView: View {
     
     @State var notificationTime: Int = 3
     
+    var containerHeight:CGFloat = UIScreen.main.bounds.height
+    
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "E, MMM d"
@@ -136,8 +138,12 @@ struct AddItemView: View {
 
                 })
                 
+                
             }
             
+            if containerHeight < 1000 {
+                Spacer()
+            }
                 
         }
     }
