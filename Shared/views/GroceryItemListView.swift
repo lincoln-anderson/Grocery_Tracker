@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GroceryItemListView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var passedGroceryItemName: String
     
     var passedGroceryItemPurchasedDate: Date
@@ -26,7 +28,7 @@ struct GroceryItemListView: View {
             Spacer()
             HStack{
                 Text(passedGroceryItemName)
-                    .foregroundColor(!(isExpired(expirationDate: passedGroceryItemExpirationDate)) ? .white : .red)
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
                     .font(.title)
                     .bold()
                     

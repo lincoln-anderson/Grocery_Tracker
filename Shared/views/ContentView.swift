@@ -110,7 +110,8 @@ struct ContentView: View {
                             }
                         } else {
                             Section(header:
-                                        Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days").bold()
+                                        Text("These \(getWithinWeek(groceryItems: groceryItems).count) items will expire within 7 days")
+                                .bold()
                                 .font(.title)
                                 .multilineTextAlignment(.center)
                             ) {
@@ -257,6 +258,13 @@ func getWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     let range = currentDate...outerRange
     
     for item in groceryItems {
+        if isSameDay(date1: item.expirationDate!, date2: Date()) {
+            continue
+        }
+        if Calendar.current.isDateInTomorrow(item.expirationDate!) {
+            weekArray.append(item)
+            continue
+        }
         if range.contains(item.expirationDate!){
             weekArray.append(item)
         }
@@ -281,10 +289,12 @@ func getNotWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem
 func getExpired(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     var weekArray: [GroceryItem] = []
     
-    let currentDate = Date()
-    
     for item in groceryItems {
-        if item.expirationDate! < currentDate && !isSameDay(date1: currentDate, date2: item.expirationDate!) {
+        let isntToday = !isSameDay(date1: item.expirationDate!, date2: Date())
+        
+        let beforeToday = item.expirationDate! < Date()
+        
+        if isntToday && beforeToday {
             weekArray.append(item)
         }
     }
@@ -293,21 +303,17 @@ func getExpired(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
 }
 
 func isSameDay(date1: Date, date2: Date) -> Bool {
-    let diff = Calendar.current.dateComponents([.day], from: date1, to: date2)
-    if diff.day == 0 {
-        return true
-    } else {
-        return false
-    }
+    let diff = Calendar.current.isDate(date1, equalTo: date2, toGranularity: .day)
+    return diff
 }
     
 func isToday(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem] {
     var weekArray: [GroceryItem] = []
     
     for item in groceryItems {
-        let diff = Calendar.current.dateComponents([.day], from: Date(), to: item.expirationDate!)
+        let diff = Calendar.current.isDateInToday(item.expirationDate!)
         
-        if diff.day == 0 {
+        if diff {
             weekArray.append(item)
         }
     }
