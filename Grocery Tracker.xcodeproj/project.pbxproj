@@ -564,11 +564,13 @@
 				DEVELOPMENT_TEAM = 9VS7Z57592;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = "";
 				PRODUCT_BUNDLE_IDENTIFIER = SproutsGroceryTracker;
 				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = iphoneos;
@@ -590,11 +592,14 @@
 				DEVELOPMENT_TEAM = 9VS7Z57592;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = "";
+				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SproutsGroceryTracker;
 				PRODUCT_NAME = "Grocery Tracker";
 				SDKROOT = iphoneos;

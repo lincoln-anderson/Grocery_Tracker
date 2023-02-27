@@ -51,20 +51,24 @@ struct AddItemView: View {
                 DatePicker("Purchase Date", selection: $purchaseDate, displayedComponents: .date)
                     .padding(.horizontal)
                     .font(.largeTitle)
+                    .minimumScaleFactor(0.2)
                 
                 DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: .date)
                     .padding(.horizontal)
                     .font(.largeTitle)
+                    .minimumScaleFactor(0.2)
                 if #available(iOS 15.0, *) {
                     Toggle("Expiration Notication", isOn: $sendNotification)
                         .padding(.horizontal)
                         .font(.largeTitle)
+                        .minimumScaleFactor(0.2)
                         .tint(colorScheme == .dark ? .white : .black)
                 } else {
                     // Fallback on earlier versions
                 }
                 Text("Choose number of days before expiration notification is sent")
                     .font(.title2)
+                    .minimumScaleFactor(0.2)
                     .padding(.horizontal)
                     .multilineTextAlignment(.center)
                 Picker("days before exipring to get notification", selection: $notificationTime, content: {
