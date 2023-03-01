@@ -59,7 +59,7 @@ struct ContentView: View {
                             }
                         } else {
                             Section(header:
-                                        Text("These \(getExpired(groceryItems: groceryItems).count) Have expired!").bold()
+                                        Text("These \(getExpired(groceryItems: groceryItems).count) items have expired!").bold()
                                 .font(.title)
                                 .foregroundColor(.red)
                                 .multilineTextAlignment(.center)

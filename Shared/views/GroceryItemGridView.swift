@@ -27,16 +27,14 @@ struct GroceryItemGridView: View {
     var body: some View {
         if passedGroceryItemExpirationDate >= Date() || isSameDay(date1: interval, date2: passedGroceryItemExpirationDate) {
             VStack{
-                Spacer()
                 VStack(spacing: 10){
                     Text(passedGroceryItemName)
                         .font(.title2)
                         .bold()
-                        .frame(width: containerWidth)
+                        .frame(width: containerWidth/2.2)
                         .scaledToFill()
-                        .minimumScaleFactor(0.5)
-                        .lineLimit(1)
-                    Spacer()
+                        .minimumScaleFactor(0.4)
+                        .multilineTextAlignment(.center)
                     HStack{
                         Text("Exp.")
                             .bold()
@@ -60,6 +58,10 @@ struct GroceryItemGridView: View {
                     Text(passedGroceryItemName)
                         .font(.title2)
                         .bold()
+                        .frame(width: containerWidth/2.2)
+                        .scaledToFill()
+                        .minimumScaleFactor(0.4)
+                        .multilineTextAlignment(.center)
                         .foregroundColor(.red)
                     Spacer()
                     HStack{
