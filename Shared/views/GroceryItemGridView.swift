@@ -15,6 +15,10 @@ struct GroceryItemGridView: View {
     
     var passedGroceryItemExpirationDate: Date
     
+    var passedGroceryQuantity: Int16
+    
+    var passedMeasurement: String
+    
     var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
     
     var containerHeight:CGFloat = 85
@@ -39,6 +43,10 @@ struct GroceryItemGridView: View {
                         .lineLimit(3)
                         .multilineTextAlignment(.center)
                     Spacer()
+                    HStack{
+                        Text(String(passedGroceryQuantity))
+                        Text(passedMeasurement)
+                    }
                     HStack{
                         Text("Exp.")
                             .bold()
@@ -100,7 +108,7 @@ struct GroceryItemGridView_Previews: PreviewProvider {
         item.expirationDate = Date()
         item.name = "Sample Sample"
         
-        return GroceryItemGridView(passedGroceryItemName: item.name!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
+        return GroceryItemGridView(passedGroceryItemName: item.name!, passedGroceryItemExpirationDate: item.expirationDate!, passedGroceryQuantity: item.quantity, passedMeasurement: item.measurement!).environment(\.managedObjectContext, viewContext)
     }
 }
 

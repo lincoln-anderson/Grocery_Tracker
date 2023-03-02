@@ -50,8 +50,6 @@ struct ContentView: View {
                     //is expired
                     if getExpired(groceryItems: groceryItems).count > 0 {
                         if getExpired(groceryItems: groceryItems).count == 1 {
-                            
-                            let _ = print("1")
                             Section(header:
                                         Text("This \(getExpired(groceryItems: groceryItems).count) item has expired!").bold()
                                 .font(.title)
@@ -60,7 +58,7 @@ struct ContentView: View {
 
                             ) {
                                     ForEach(getExpired(groceryItems: groceryItems)) { groceryItem in
-                                        GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                        GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                     }.onTapGesture {
                                         let _ = print("tapped")
                                     }
@@ -74,7 +72,7 @@ struct ContentView: View {
 
                             ) {
                                 ForEach(getExpired(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                 }
                             }
                         }
@@ -88,7 +86,7 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
                             ) {
                                 ForEach(isToday(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                 }
                             }
                         } else {
@@ -98,7 +96,7 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
                             ) {
                                 ForEach(isToday(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement ?? "")
                                 }
                                 //.onTapGesture(perform: deleteItems(offsets: offset))
                             }
@@ -114,7 +112,7 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
                             ) {
                                 ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                 }
                             }
                         } else {
@@ -125,7 +123,7 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
                             ) {
                                 ForEach(getWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                 }
                             }
                         }
@@ -140,7 +138,7 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
                             ) {
                                 ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                 }
                             }
                         } else {
@@ -150,7 +148,7 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
                             ) {
                                 ForEach(getNotWithinWeek(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
                                 }
                             }
                         }
@@ -198,7 +196,7 @@ struct ContentView: View {
                             }) {
                                 let _ = print("tapped")
 
-                                AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date()).environment(\.managedObjectContext, self.viewContext)
+                                AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date(), quantity: 1).environment(\.managedObjectContext, self.viewContext)
                 
                             }
                 
@@ -302,7 +300,6 @@ func getNotWithinWeek(groceryItems: FetchedResults<GroceryItem>) -> [GroceryItem
             weekArray.append(item)
         }
     }
-    print(weekArray.count)
     return weekArray
 }
 

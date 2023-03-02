@@ -20,9 +20,23 @@ struct AddItemView: View {
     
     @State var purchaseDate: Date
     
+    @State var quantity: Int = 1
+    
+    @State var measurement: String = Measurements.oz.rawValue
+    
     @State var sendNotification: Bool = true
     
     @State var notificationTime: Int = 3
+    
+    enum Measurements: String, CaseIterable, Identifiable {
+        
+        case oz
+        case lb
+        case ml
+        
+        var id: String { self.rawValue }
+        
+    }
     
     var containerHeight:CGFloat = UIScreen.main.bounds.height
     
@@ -57,6 +71,20 @@ struct AddItemView: View {
                     .padding(.horizontal)
                     .font(.largeTitle)
                     .minimumScaleFactor(0.8)
+                HStack{
+                    Picker("quantity", selection: $quantity) {
+                        ForEach(1...100, id: \.self) {
+                            Text("\($0)")
+                            
+                        }
+                            }.pickerStyle(.wheel)
+                    Picker("Measurement", selection: $measurement) {
+                        ForEach(Measurements.allCases) { measurement in
+                            Text(measurement.rawValue.capitalized)
+                        }
+                    }.pickerStyle(.wheel)
+                }
+                Text(measurement)
                 if #available(iOS 15.0, *) {
                     Toggle("Expiration Notication", isOn: $sendNotification)
                         .padding(.horizontal)
@@ -66,11 +94,6 @@ struct AddItemView: View {
                 } else {
                     // Fallback on earlier versions
                 }
-                Text("Choose number of days before expiration notification is sent")
-                    .font(.title2)
-                    .minimumScaleFactor(0.8)
-                    .padding(.horizontal)
-                    .multilineTextAlignment(.center)
                 Picker("days before exipring to get notification", selection: $notificationTime, content: {
                     Text("1").tag(1)
                     Text("2").tag(2)
@@ -81,7 +104,6 @@ struct AddItemView: View {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .font(.title)
                 .padding(.horizontal)
-                Spacer()
                 Button(action: {
                     
                     if sendNotification == true {
@@ -120,11 +142,18 @@ struct AddItemView: View {
 
                         // add our notification request
                         UNUserNotificationCenter.current().add(request)
-                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate)
+                        print("quant is")
+                        print(newName)
+                        print(quantity)
+                        
+                        //self.measurement = String(measurementChoice.rawValue)
+                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Int16(quantity), measurement: measurement)
                         self.isPresented = false
                         
                     } else {
-                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate)
+                        print("quant is")
+                        print(quantity)
+                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Int16(quantity), measurement: measurement)
                         self.isPresented = false
                     }
                     
@@ -143,16 +172,17 @@ struct AddItemView: View {
                 })
                 
                 
-            }
+            }.ignoresSafeArea(.keyboard, edges: .bottom)
             
             if containerHeight < 1000 {
                 Spacer()
             }
                 
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
-    func newItem(newName: String, expirationDate: Date, purchaseDate: Date) {
+    func newItem(newName: String, expirationDate: Date, purchaseDate: Date, quantity: Int16, measurement: String) {
         let newItem = GroceryItem(context: viewContext)
         
         newItem.name = newName
@@ -160,6 +190,10 @@ struct AddItemView: View {
         newItem.expirationDate = expirationDate
         
         newItem.purchasedDate = purchaseDate
+        
+        newItem.quantity = quantity
+        
+        newItem.measurement = measurement
         
         do {
             try viewContext.save()
@@ -176,11 +210,12 @@ struct AddItemView_Previews: PreviewProvider {
     @State static var isShowing = false
     @State static var newName = ""
     @State static var date = Date()
+    @State static var quantity = 1
     static var previews: some View {
         Group {
-            AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date)
+            AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date, quantity: quantity, measurement: newName)
                 .preferredColorScheme(.dark)
-            AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date)
+            AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date, quantity: quantity, measurement: newName)
                 .preferredColorScheme(.light)
         }
     }
