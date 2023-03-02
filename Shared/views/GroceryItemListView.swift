@@ -37,8 +37,7 @@ struct GroceryItemListView: View {
                     Text("Exp. Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
                         .bold()
                 }
-            }
-        }
+            }        }
     }
 }
 

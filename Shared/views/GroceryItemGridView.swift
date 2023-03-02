@@ -17,6 +17,8 @@ struct GroceryItemGridView: View {
     
     var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
     
+    var containerHeight:CGFloat = 85
+    
     let interval = Date()
     
     static let DateFormat: DateFormatter = {
@@ -27,61 +29,63 @@ struct GroceryItemGridView: View {
     var body: some View {
         if passedGroceryItemExpirationDate >= Date() || isSameDay(date1: interval, date2: passedGroceryItemExpirationDate) {
             VStack{
-                VStack(spacing: 10){
+                VStack(){
                     Text(passedGroceryItemName)
                         .font(.title2)
                         .bold()
                         .frame(width: containerWidth/2.2)
                         .scaledToFill()
-                        .minimumScaleFactor(0.4)
+                        .minimumScaleFactor(0.01)
+                        .lineLimit(3)
                         .multilineTextAlignment(.center)
-                    HStack{
-                        Text("Exp.")
-                            .bold()
-                        Spacer()
-                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
-                            .bold()
-                    }
-                }
-            }
-            .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
-            .padding(.all)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
-            )
-            
-        } else {
-            VStack{
-                Spacer()
-                VStack(spacing: 10){
-                    Text(passedGroceryItemName)
-                        .font(.title2)
-                        .bold()
-                        .frame(width: containerWidth/2.2)
-                        .scaledToFill()
-                        .minimumScaleFactor(0.4)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.red)
                     Spacer()
                     HStack{
                         Text("Exp.")
                             .bold()
-                            .foregroundColor(.red)
-
                         Spacer()
                         Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
                             .bold()
-                            .foregroundColor(.red)
                     }
                 }
+                .frame(height: 85)
             }
-            .frame(minWidth: 150, idealWidth: 168, maxWidth: 168, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
-            .padding(.all)
+            .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .padding()
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
+            )
+            .contentShape(Rectangle())
+            
+        } else {
+            VStack{
+                VStack(){
+                    Text(passedGroceryItemName)
+                        .font(.title2)
+                        .bold()
+                        .frame(width: containerWidth/2.2)
+                        .scaledToFill()
+                        .minimumScaleFactor(0.01)
+                        .lineLimit(3)
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                    HStack{
+                        Text("Exp.")
+                            .bold()
+                        Spacer()
+                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
+                            .bold()
+                    }
+                }
+                .frame(height: 85)
+            }
+            .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .padding()
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(.red, lineWidth: 6)
             )
+            .contentShape(Rectangle())
         }
         
     }

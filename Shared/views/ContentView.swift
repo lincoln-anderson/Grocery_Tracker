@@ -22,6 +22,10 @@ struct ContentView: View {
     
     @State var showingRemoveSheet = false
     
+    @State var showingEditSheet = false
+    
+    @State var showingAlert = false
+    
     @State var testString = "string"
     
     var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
@@ -46,6 +50,8 @@ struct ContentView: View {
                     //is expired
                     if getExpired(groceryItems: groceryItems).count > 0 {
                         if getExpired(groceryItems: groceryItems).count == 1 {
+                            
+                            let _ = print("1")
                             Section(header:
                                         Text("This \(getExpired(groceryItems: groceryItems).count) item has expired!").bold()
                                 .font(.title)
@@ -53,9 +59,11 @@ struct ContentView: View {
                                 .multilineTextAlignment(.center)
 
                             ) {
-                                ForEach(getExpired(groceryItems: groceryItems)) { groceryItem in
-                                    GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
-                                }
+                                    ForEach(getExpired(groceryItems: groceryItems)) { groceryItem in
+                                        GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                                    }.onTapGesture {
+                                        let _ = print("tapped")
+                                    }
                             }
                         } else {
                             Section(header:
@@ -92,6 +100,7 @@ struct ContentView: View {
                                 ForEach(isToday(groceryItems: groceryItems)) { groceryItem in
                                     GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
                                 }
+                                //.onTapGesture(perform: deleteItems(offsets: offset))
                             }
                         }
                     }
@@ -148,6 +157,9 @@ struct ContentView: View {
                     }
                     
                 }
+                .onTapGesture {
+                    let _ = print("tapped1")
+                }
             }
             Spacer()
             
@@ -184,7 +196,8 @@ struct ContentView: View {
                                 showingAddSheet = false
                 
                             }) {
-                
+                                let _ = print("tapped")
+
                                 AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date()).environment(\.managedObjectContext, self.viewContext)
                 
                             }
@@ -220,6 +233,9 @@ struct ContentView: View {
                 
         }
     }
+    private func deleteItems(offsets: IndexSet) {
+        print(offsets.map { groceryItems[$0] })
+    }
 
     private func addItem() {
         withAnimation {
@@ -237,6 +253,10 @@ struct ContentView: View {
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
+    }
+    
+    private func editItem() {
+        
     }
 
     
