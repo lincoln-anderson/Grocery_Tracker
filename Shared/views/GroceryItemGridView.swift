@@ -44,11 +44,7 @@ struct GroceryItemGridView: View {
                         .multilineTextAlignment(.center)
                     Spacer()
                     HStack{
-                        Text(String(passedGroceryQuantity))
-                        Text(passedMeasurement)
-                    }
-                    HStack{
-                        Text("Exp.")
+                        Text("\(passedGroceryQuantity) \(passedMeasurement)")
                             .bold()
                         Spacer()
                         Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
@@ -78,13 +74,15 @@ struct GroceryItemGridView: View {
                         .multilineTextAlignment(.center)
                     Spacer()
                     HStack{
-                        Text("Exp.")
+                        Text("\(passedGroceryQuantity) \(passedMeasurement)")
                             .bold()
                         Spacer()
                         Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
                             .bold()
                     }
                 }
+                // MARK: ask teighlor about which looks better
+                //.foregroundColor(.red)
                 .frame(height: 85)
             }
             .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)

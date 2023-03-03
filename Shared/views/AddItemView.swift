@@ -84,7 +84,11 @@ struct AddItemView: View {
                         }
                     }.pickerStyle(.wheel)
                 }
-                Text(measurement)
+                Text("Choose number of days before expiration notification is sent")
+                    .font(.title2)
+                    .minimumScaleFactor(0.8)
+                    .padding(.horizontal)
+                    .multilineTextAlignment(.center)
                 if #available(iOS 15.0, *) {
                     Toggle("Expiration Notication", isOn: $sendNotification)
                         .padding(.horizontal)

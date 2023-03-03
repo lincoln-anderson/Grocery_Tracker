@@ -47,7 +47,7 @@ struct ContentView: View {
                         .multilineTextAlignment(.center)
                 }
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                    //is expired
+                    // MARK: is expired
                     if getExpired(groceryItems: groceryItems).count > 0 {
                         if getExpired(groceryItems: groceryItems).count == 1 {
                             Section(header:
@@ -77,7 +77,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    // expires today section
+                    // MARK: expires today section
                     if isToday(groceryItems: groceryItems).count > 0 {
                         if isToday(groceryItems: groceryItems).count == 1 {
                             Section(header:
@@ -95,15 +95,16 @@ struct ContentView: View {
                                 .font(.title)
                                 .multilineTextAlignment(.center)
                             ) {
-                                ForEach(isToday(groceryItems: groceryItems)) { groceryItem in
+                                ForEach(isToday(groceryItems: groceryItems), id: \.self) { groceryItem in
                                     GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement ?? "")
+                                }.onTapGesture {
+                                    print("onTap")
                                 }
-                                //.onTapGesture(perform: deleteItems(offsets: offset))
                             }
                         }
                     }
                     
-                    //expires within week section
+                    // MARK: expires within week section
                     if getWithinWeek(groceryItems: groceryItems).count > 0 {
                         if getWithinWeek(groceryItems: groceryItems).count == 1 {
                             Section(header:
@@ -129,7 +130,7 @@ struct ContentView: View {
                         }
                     }
                     
-                    //expires after 7 days
+                    // MARK: expires after 7 days
                     if getNotWithinWeek(groceryItems: groceryItems).count > 0 {
                         if getNotWithinWeek(groceryItems: groceryItems).count == 1 {
                             Section(header:
@@ -160,7 +161,7 @@ struct ContentView: View {
                 }
             }
             Spacer()
-            
+            // MARK: Buttons
             VStack{
             
                 
@@ -201,7 +202,7 @@ struct ContentView: View {
                             }
                 
                 Button(action: {self.showingRemoveSheet.toggle()}, label: {
-                        Text("Delete Item")
+                        Text("Mark Item as Used")
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -231,6 +232,8 @@ struct ContentView: View {
                 
         }
     }
+    
+    // MARK: view methods
     private func deleteItems(offsets: IndexSet) {
         print(offsets.map { groceryItems[$0] })
     }
