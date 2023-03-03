@@ -59,8 +59,8 @@ struct ContentView: View {
                             ) {
                                     ForEach(getExpired(groceryItems: groceryItems)) { groceryItem in
                                         GroceryItemGridView(passedGroceryItemName: groceryItem.name!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryQuantity: groceryItem.quantity, passedMeasurement: groceryItem.measurement!)
-                                    }.onTapGesture {
-                                        let _ = print("tapped")
+                                    }.onLongPressGesture {
+                                        print("did long press")
                                     }
                             }
                         } else {
