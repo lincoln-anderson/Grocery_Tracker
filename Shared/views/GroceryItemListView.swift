@@ -17,6 +17,10 @@ struct GroceryItemListView: View {
     
     var passedGroceryItemExpirationDate: Date
     
+    var passedGroceryItemQuantity: Int16
+    
+    var passedGroceryItemMeasurement: String
+    
     static let DateFormat: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "E, MMM d"
@@ -34,10 +38,18 @@ struct GroceryItemListView: View {
                     
                 Spacer()
                 VStack{
+                    HStack{
+                        Text(String(self.passedGroceryItemQuantity))
+                            .bold()
+                        Text(self.passedGroceryItemMeasurement)
+                            .bold()
+                    }
                     Text("Exp. Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
                         .bold()
+                    
                 }
-            }        }
+            }
+        }
     }
 }
 
@@ -54,7 +66,9 @@ struct GroceryItemListView_Previews: PreviewProvider {
         let item = GroceryItem(context: viewContext)
         item.expirationDate = Date()
         item.name = "Sample"
+        item.quantity = 10
+        item.measurement = "Oz"
         
-        return GroceryItemListView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!).environment(\.managedObjectContext, viewContext)
+        return GroceryItemListView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!, passedGroceryItemQuantity: item.quantity, passedGroceryItemMeasurement: item.measurement!).environment(\.managedObjectContext, viewContext)
     }
 }

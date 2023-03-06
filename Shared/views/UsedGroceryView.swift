@@ -27,7 +27,7 @@ struct UsedGroceryView: View {
                 List() {
                     Section(header: myHeader()) {
                         ForEach(groceryItems) { groceryItem in
-                            GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!)
+                            GroceryItemListView(passedGroceryItemName: groceryItem.name!, passedGroceryItemPurchasedDate: groceryItem.purchasedDate!, passedGroceryItemExpirationDate: groceryItem.expirationDate!, passedGroceryItemQuantity: groceryItem.quantity, passedGroceryItemMeasurement: groceryItem.measurement!)
                         }
                     
                     .onDelete(perform: deleteItems)

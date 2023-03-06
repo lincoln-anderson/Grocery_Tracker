@@ -54,6 +54,7 @@ struct GroceryItemGridView: View {
                 .frame(height: 85)
             }
             .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .background(Color.black)
             .padding()
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
@@ -86,11 +87,13 @@ struct GroceryItemGridView: View {
                 .frame(height: 85)
             }
             .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
+            .background(Color.black)
             .padding()
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(.red, lineWidth: 6)
             )
+
             .contentShape(Rectangle())
         }
         
