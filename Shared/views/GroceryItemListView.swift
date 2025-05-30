@@ -52,12 +52,6 @@ struct GroceryItemListView: View {
         }
     }
 }
-
-func isExpired(expirationDate: Date) -> Bool {
-    let isExpiredBool = expirationDate <= Date() && !isSameDay(date1: Date(), date2: expirationDate)
-    return isExpiredBool
-}
-
 struct GroceryItemListView_Previews: PreviewProvider {
     
     static var viewContext = PersistenceController.preview.container.viewContext

@@ -1,125 +1,72 @@
-//
 //  GroceryItemGridView.swift
 //  Grocery_Tracker
-//
-//  Created by lincoln anderson on 5/4/21.
-//
 
 import SwiftUI
 
 struct GroceryItemGridView: View {
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    var passedGroceryItemName: String
-    
-    var passedGroceryItemExpirationDate: Date
-    
-    var passedGroceryQuantity: Int16
-    
-    var passedMeasurement: String
-    
-    var containerWidth:CGFloat = UIScreen.main.bounds.width - 32.0
-    
-    var containerHeight:CGFloat = 85
-    
-    let interval = Date()
-    
-    static let DateFormat: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "E, MMM d"
-            return formatter
-        }()
-    var body: some View {
-        if passedGroceryItemExpirationDate >= Date() || isSameDay(date1: interval, date2: passedGroceryItemExpirationDate) {
-            VStack{
-                VStack(){
-                    Text(passedGroceryItemName)
-                        .font(.title2)
-                        .bold()
-                        .frame(width: containerWidth/2.2)
-                        .scaledToFill()
-                        .minimumScaleFactor(0.01)
-                        .lineLimit(3)
-                        .multilineTextAlignment(.center)
-                    Spacer()
-                    HStack{
-                        Text("\(passedGroceryQuantity) \(passedMeasurement)")
-                            .bold()
-                        Spacer()
-                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
-                            .bold()
-                    }
-                }
-                .frame(height: 85)
-            }
-            .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
-            .background(Color.black)
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
-            )
-            .contentShape(Rectangle())
-            
-        } else {
-            VStack{
-                VStack(){
-                    Text(passedGroceryItemName)
-                        .font(.title2)
-                        .bold()
-                        .frame(width: containerWidth/2.2)
-                        .scaledToFill()
-                        .minimumScaleFactor(0.01)
-                        .lineLimit(3)
-                        .multilineTextAlignment(.center)
-                    Spacer()
-                    HStack{
-                        Text("\(passedGroceryQuantity) \(passedMeasurement)")
-                            .bold()
-                        Spacer()
-                        Text(self.passedGroceryItemExpirationDate, formatter: GroceryItemGridView.DateFormat)
-                            .bold()
-                    }
-                }
-                // MARK: ask teighlor about which looks better
-                //.foregroundColor(.red)
-                .frame(height: 85)
-            }
-            .frame(minWidth: containerWidth * 0.42, idealWidth: containerWidth * 0.42, maxWidth: containerWidth * 0.42, minHeight: 85, idealHeight: 85, maxHeight: 85, alignment: .center)
-            .background(Color.black)
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(.red, lineWidth: 6)
-            )
 
-            .contentShape(Rectangle())
+    @Environment(\.colorScheme) var colorScheme
+
+    var item: GroceryItem
+
+    var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
+
+    let sproutGreen = Color(red: 0.32, green: 0.55, blue: 0.39) // A nice brussel sprout green
+
+    var body: some View {
+
+        HStack(alignment: .top, spacing: 12) {
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(item.name ?? "Unnamed")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                HStack(spacing: 6) {
+                    Image(systemName: "calendar")
+                        .foregroundColor(sproutGreen)
+                    Text(item.expirationDate?.shortDisplayString ?? "")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                HStack(spacing: 6) {
+                    Image(systemName: "scalemass")
+                        .foregroundColor(sproutGreen)
+                    Text("\(item.quantity) \(item.measurement ?? "")")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+            }
+            Spacer()
         }
-        
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .padding(.horizontal)
+    }
+
+    private func initials(from name: String?) -> String {
+        guard let name = name?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty else { return "--" }
+        let parts = name.components(separatedBy: " ")
+        let initials = parts.prefix(2).compactMap { $0.first }.map { String($0) }
+        return initials.joined().uppercased()
     }
 }
 
 struct GroceryItemGridView_Previews: PreviewProvider {
-    
     static var viewContext = PersistenceController.preview.container.viewContext
-    
+
     static var previews: some View {
         let item = GroceryItem(context: viewContext)
         item.expirationDate = Date()
-        item.name = "Sample Sample"
-        
-        return GroceryItemGridView(passedGroceryItemName: item.name!, passedGroceryItemExpirationDate: item.expirationDate!, passedGroceryQuantity: item.quantity, passedMeasurement: item.measurement!).environment(\.managedObjectContext, viewContext)
+        item.name = "Canned Beans"
+        item.quantity = 2
+        item.measurement = "cans"
+
+        return GroceryItemGridView(item: item)
+            .environment(\.managedObjectContext, viewContext)
+            .previewLayout(.sizeThatFits)
     }
-}
-
-
-func computeNewDate(from fromDate: Date, to toDate: Date) -> Date  {
-     let delta = toDate.timeIntervalSince(fromDate)
-     let today = Date()
-     if delta < 0 {
-         return today
-     } else {
-         return today.addingTimeInterval(delta)
-     }
 }
