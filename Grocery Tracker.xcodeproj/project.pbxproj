@@ -79,8 +79,18 @@
 		01FB228F2DEA432A007885C1 /* GroceryItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItemGridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		01E750C12DEB4F5F002E1B0F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Theme.swift,
+			);
+			target = 01A7CC9E2638946C00A5A40B /* Grocery Tracker (iOS) */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		01E750B92DEB4CF0002E1B0F /* theme */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = theme; sourceTree = "<group>"; };
+		01E750B92DEB4CF0002E1B0F /* theme */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (01E750C12DEB4F5F002E1B0F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = theme; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
