@@ -12,11 +12,11 @@ struct GroceryItemGridView: View {
     var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
 
     var body: some View {
-        let isFresh = item.expirationDate?.isExpired == false || item.expirationDate?.isSameDay(as: Date()) == true
+//        let isFresh = item.expirationDate?.isExpired == false || item.expirationDate?.isSameDay(as: Date()) == true
 
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(item.name ?? "Unnamed")
+                Text(item.name?.capitalized ?? "Unnamed")
                     .font(.headline)
                     .foregroundColor(.primary)
 

@@ -19,38 +19,38 @@ struct Git: Codable, Identifiable {
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.colorScheme) var colorScheme
-
+    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.expirationDate, ascending: true)],
         animation: .default)
     private var groceryItems: FetchedResults<GroceryItem>
-
+    
     @State var showingAddSheet = false
     @State var showingRemoveSheet = false
     @State var showingEditSheet = false
     @State var showingAlert = false
     @State var testString = "string"
     @State private var git = Git(id: 1, login: "lincoln")
-
+    
     var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
     var containerHeight: CGFloat = UIScreen.main.bounds.height
-
+    
     let columns = [GridItem(.adaptive(minimum: 180))]
-
+    
     var body: some View {
         VStack {
-//            if #available(iOS 15.0, *) {
-//                Text(git.login)
-//                    .task {
-//                        do {
-//                            git = try await fetchGit()
-//                        } catch {
-//                            print("bad")
-//                        }
-//                    }
-//            } else {
-//                // Fallback on earlier versions
-//            }
+            //            if #available(iOS 15.0, *) {
+            //                Text(git.login)
+            //                    .task {
+            //                        do {
+            //                            git = try await fetchGit()
+            //                        } catch {
+            //                            print("bad")
+            //                        }
+            //                    }
+            //            } else {
+            //                // Fallback on earlier versions
+            //            }
             ScrollView {
                 if groceryItems.isEmpty {
                     Text("Tap the \"Add Item\" button to add your groceries and begin tracking the expiration dates")
@@ -58,9 +58,9 @@ struct ContentView: View {
                         .font(.title)
                         .multilineTextAlignment(.center)
                 }
-
+                
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-
+                    
                     let expired = expiredItems()
                     if !expired.isEmpty {
                         let expiredLabel = "\(expired.count != 1 ? "These" : "This") \(expired.count) item" + (expired.count == 1 ? " has" : "s have") + " expired!"
@@ -70,7 +70,7 @@ struct ContentView: View {
                             }
                         }
                     }
-
+                    
                     let today = todayItems()
                     if !today.isEmpty {
                         let todayLabel = "\(today.count != 1 ? "These" : "This") \(today.count) item" + (today.count == 1 ? " expires" : "s expire") + " today"
@@ -80,7 +80,7 @@ struct ContentView: View {
                             }
                         }
                     }
-
+                    
                     let soon = withinWeekItems()
                     if !soon.isEmpty {
                         let soonLabel = "\(soon.count != 1 ? "These" : "This") \(soon.count) item" + (soon.count == 1 ? " will" : "s will") + " expire within 7 days"
@@ -90,7 +90,7 @@ struct ContentView: View {
                             }
                         }
                     }
-
+                    
                     let later = afterWeekItems()
                     if !later.isEmpty {
                         let laterLabel = "\(later.count != 1 ? "These" : "This") \(later.count) item" + (later.count == 1 ? " expires" : "s expire") + " after 7 days"
@@ -102,9 +102,9 @@ struct ContentView: View {
                     }
                 }
             }
-
+            
             Spacer()
-
+            
             VStack {
                 Button("Add Item") {
                     showingAddSheet = true
@@ -119,8 +119,8 @@ struct ContentView: View {
                     )
                     .environment(\.managedObjectContext, viewContext)
                 }
-
-
+                
+                
                 Button("Mark Item as Used") {
                     showingRemoveSheet = true
                 }
@@ -132,31 +132,31 @@ struct ContentView: View {
                     )
                     .environment(\.managedObjectContext, viewContext)
                 }
-
-
+                
+                
             }
-
+            
             if containerHeight < 1000 {
                 Spacer()
             }
         }
     }
-
+    
     private func expiredItems() -> [GroceryItem] {
         groceryItems.filter { $0.expirationDate?.isExpired == true }
     }
-
+    
     private func todayItems() -> [GroceryItem] {
         groceryItems.filter { $0.expirationDate?.isToday == true }
     }
-
+    
     private func withinWeekItems() -> [GroceryItem] {
         groceryItems.filter {
             guard let date = $0.expirationDate else { return false }
             return !date.isToday && (date.isTomorrow || date.isWithin(days: 7))
         }
     }
-
+    
     private func afterWeekItems() -> [GroceryItem] {
         groceryItems.filter {
             guard let date = $0.expirationDate else { return false }
