@@ -63,14 +63,8 @@ struct ContentView: View {
 
                     let expired = expiredItems()
                     if !expired.isEmpty {
-                        let expiredLabel = "These \(expired.count) item" + (expired.count == 1 ? " has" : "s have") + " expired!"
-                        Section(header:
-                            Text(expiredLabel)
-                                .bold()
-                                .font(.title)
-                                .foregroundColor(.red)
-                                .multilineTextAlignment(.center)
-                        ) {
+                        let expiredLabel = "\(expired.count != 1 ? "These" : "This") \(expired.count) item" + (expired.count == 1 ? " has" : "s have") + " expired!"
+                        Section(header: SectionHeader(text: expiredLabel, color: .red)) {
                             ForEach(expired) { item in
                                 GroceryItemGridView(item: item)
                             }
@@ -79,13 +73,8 @@ struct ContentView: View {
 
                     let today = todayItems()
                     if !today.isEmpty {
-                        let todayLabel = "These \(today.count) item" + (today.count == 1 ? " expires" : "s expire") + " today"
-                        Section(header:
-                            Text(todayLabel)
-                                .bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                        ) {
+                        let todayLabel = "\(today.count != 1 ? "These" : "This") \(today.count) item" + (today.count == 1 ? " expires" : "s expire") + " today"
+                        Section(header: SectionHeader(text: todayLabel, color: .sproutGreen)) {
                             ForEach(today) { item in
                                 GroceryItemGridView(item: item)
                             }
@@ -94,13 +83,8 @@ struct ContentView: View {
 
                     let soon = withinWeekItems()
                     if !soon.isEmpty {
-                        let soonLabel = "These \(soon.count) item" + (soon.count == 1 ? " will" : "s will") + " expire within 7 days"
-                        Section(header:
-                            Text(soonLabel)
-                                .bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                        ) {
+                        let soonLabel = "\(soon.count != 1 ? "These" : "This") \(soon.count) item" + (soon.count == 1 ? " will" : "s will") + " expire within 7 days"
+                        Section(header: SectionHeader(text: soonLabel, color: .sproutGreen)) {
                             ForEach(soon) { item in
                                 GroceryItemGridView(item: item)
                             }
@@ -109,13 +93,8 @@ struct ContentView: View {
 
                     let later = afterWeekItems()
                     if !later.isEmpty {
-                        let laterLabel = "These \(later.count) item" + (later.count == 1 ? " expires" : "s expire") + " after 7 days"
-                        Section(header:
-                            Text(laterLabel)
-                                .bold()
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                        ) {
+                        let laterLabel = "\(later.count != 1 ? "These" : "This") \(later.count) item" + (later.count == 1 ? " expires" : "s expire") + " after 7 days"
+                        Section(header: SectionHeader(text: laterLabel, color: .sproutGreen)) {
                             ForEach(later) { item in
                                 GroceryItemGridView(item: item)
                             }
