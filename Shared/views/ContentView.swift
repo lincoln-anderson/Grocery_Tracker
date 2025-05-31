@@ -5,6 +5,17 @@ import SwiftUI
 import CoreData
 import UserNotifications
 
+struct Git: Codable, Identifiable {
+    let id: Int
+    let login: String
+}
+
+//func fetchGit() async throws -> Git {
+//    let url = URL(string: "https://api.github.com/users/lincoln-anderson")
+//    let (data, _) = try await URLSession.shared.data(from: url!)
+//    return try JSONDecoder().decode(Git.self, from: data)
+//}
+
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.colorScheme) var colorScheme
@@ -19,6 +30,7 @@ struct ContentView: View {
     @State var showingEditSheet = false
     @State var showingAlert = false
     @State var testString = "string"
+    @State private var git = Git(id: 1, login: "lincoln")
 
     var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
     var containerHeight: CGFloat = UIScreen.main.bounds.height
@@ -27,6 +39,18 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+//            if #available(iOS 15.0, *) {
+//                Text(git.login)
+//                    .task {
+//                        do {
+//                            git = try await fetchGit()
+//                        } catch {
+//                            print("bad")
+//                        }
+//                    }
+//            } else {
+//                // Fallback on earlier versions
+//            }
             ScrollView {
                 if groceryItems.isEmpty {
                     Text("Tap the \"Add Item\" button to add your groceries and begin tracking the expiration dates")
@@ -103,46 +127,34 @@ struct ContentView: View {
             Spacer()
 
             VStack {
-                Button(action: {
-                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                        if success {
-                            print("All set!")
-                        } else if let error = error {
-                            print(error.localizedDescription)
-                        }
-                    }
-                    self.showingAddSheet.toggle()
-                }) {
-                    Text("Add Item")
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .frame(width: containerWidth * 0.95, height: 40)
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 5)
-                        )
+                Button("Add Item") {
+                    showingAddSheet = true
                 }
+                .buttonStyle(SproutsButtonStyle(color: .green))
                 .sheet(isPresented: $showingAddSheet) {
-                    AddItemView(isPresented: $showingAddSheet, expirationDate: Date(), purchaseDate: Date(), quantity: 1).environment(\.managedObjectContext, self.viewContext)
+                    AddItemView(
+                        isPresented: $showingAddSheet,
+                        expirationDate: Date(),
+                        purchaseDate: Date(),
+                        quantity: 1
+                    )
+                    .environment(\.managedObjectContext, viewContext)
                 }
 
-                Button(action: { self.showingRemoveSheet.toggle() }) {
-                    Text("Mark Item as Used")
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .frame(width: containerWidth * 0.95, height: 40)
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 6)
-                        )
+
+                Button("Mark Item as Used") {
+                    showingRemoveSheet = true
                 }
+                .buttonStyle(SproutsButtonStyle(color: .green))
                 .sheet(isPresented: $showingRemoveSheet) {
-                    UsedGroceryView(isPresented: $showingRemoveSheet, filterString: $testString).environment(\.managedObjectContext, self.viewContext)
+                    UsedGroceryView(
+                        isPresented: $showingRemoveSheet,
+                        filterString: $testString
+                    )
+                    .environment(\.managedObjectContext, viewContext)
                 }
+
+
             }
 
             if containerHeight < 1000 {
