@@ -67,22 +67,19 @@ struct AddItemView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Item Name")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.sproutGreen)
                     
                     TextField("Item Name", text: $newName)
                         .padding(12)
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color(red: 0.32, green: 0.55, blue: 0.39), lineWidth: 1))
                 }
                 .padding(.horizontal)
                 HStack() {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Purchase Date")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.sproutGreen)
                         
                         DatePicker("", selection: $purchaseDate, displayedComponents: .date)
                             .datePickerStyle(.compact)
@@ -96,7 +93,7 @@ struct AddItemView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Expiration Date")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.sproutGreen)
                         
                         DatePicker("", selection: $expirationDate, displayedComponents: .date)
                             .datePickerStyle(.compact)
@@ -110,7 +107,7 @@ struct AddItemView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Quantity & Measurement")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.sproutGreen)
                     
                     HStack(spacing: 24) {
                         Picker("Quantity", selection: $quantity) {
@@ -135,10 +132,6 @@ struct AddItemView: View {
                     .padding(12)
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(red: 0.32, green: 0.55, blue: 0.39), lineWidth: 1)
-                    )
                 }
                 .padding(.horizontal)
                 VStack(alignment: .leading, spacing: 12) {
@@ -151,7 +144,7 @@ struct AddItemView: View {
                     
                     Text("Remind me this many days before expiration:")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.sproutGreen)
                     
                     Picker("", selection: $notificationTime) {
                         ForEach(1...5, id: \.self) { day in
@@ -163,10 +156,6 @@ struct AddItemView: View {
                 .padding(12)
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color(red: 0.32, green: 0.55, blue: 0.39), lineWidth: 1)
-                )
                 .padding(.horizontal)
                 
                 Button(action: {

@@ -19,7 +19,7 @@ struct UsedGroceryView: View {
         VStack() {
             Text("Swipe left to delete")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(.sproutGreen)
                 .padding(.horizontal)
                 .padding(.top, 4)
             List {
@@ -60,20 +60,16 @@ struct GroceryItemCard: View {
                 Spacer()
                 Text("\(item.quantity) \(item.measurement ?? "")")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.sproutGreen)
             }
             
             Text("Exp. Date \(item.expirationDate?.formatted(date: .abbreviated, time: .omitted) ?? "")")
                 .font(.footnote)
-                .foregroundColor(.secondary)
+                .foregroundColor(.sproutGreen)
         }
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(red: 0.32, green: 0.55, blue: 0.39), lineWidth: 1)
-        )
         .padding(.horizontal)
     }
 }
