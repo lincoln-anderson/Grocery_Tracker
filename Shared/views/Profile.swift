@@ -8,8 +8,35 @@ import SwiftUI
 
 
 struct ProfileView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) var colorScheme
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.expirationDate, ascending: true)],
+        animation: .default)
+    private var groceryItems: FetchedResults<GroceryItem>
+    
+    @State var showingRemoveSheet = false
+    @State var testString = ""
+    
+    
     var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+        let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
+        
+        HStack {
+            Text("you have \(expired.count) expired items. Would you like to mark them as uses or thrown out?").foregroundColor(.sproutGreen)
+            Button("Mark Item as Used") {
+                showingRemoveSheet = true
+            }
+            .buttonStyle(SproutsButtonStyle(color: .green))
+            .sheet(isPresented: $showingRemoveSheet) {
+                UsedGroceryView(
+                    isPresented: $showingRemoveSheet,
+                    filterString: $testString
+                )
+                .environment(\.managedObjectContext, viewContext)
+            }
+        }
     }
 }
 

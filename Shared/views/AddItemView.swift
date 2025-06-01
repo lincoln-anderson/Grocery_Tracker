@@ -55,7 +55,7 @@ struct AddItemView: View {
                     Text("New Grocery Item")
                         .font(.title2)
                         .bold()
-                        .foregroundColor(.primary)
+                        .foregroundColor(.sproutGreen)
                         .padding(.top)
                         .padding(.horizontal)
                     
