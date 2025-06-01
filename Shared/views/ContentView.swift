@@ -37,6 +37,10 @@ struct ContentView: View {
     
     let columns = [GridItem(.adaptive(minimum: 180))]
     
+    
+    
+    
+    
     var body: some View {
         VStack {
             //            if #available(iOS 15.0, *) {
@@ -60,8 +64,7 @@ struct ContentView: View {
                 }
                 
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                    
-                    let expired = expiredItems()
+                    let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
                     if !expired.isEmpty {
                         let expiredLabel = "\(expired.count != 1 ? "These" : "This") \(expired.count) item" + (expired.count == 1 ? " has" : "s have") + " expired!"
                         Section(header: SectionHeader(text: expiredLabel, color: .red)) {
@@ -70,8 +73,8 @@ struct ContentView: View {
                             }
                         }
                     }
+                    let today = groceryItems.filter { $0.expirationDate?.isToday == true }
                     
-                    let today = todayItems()
                     if !today.isEmpty {
                         let todayLabel = "\(today.count != 1 ? "These" : "This") \(today.count) item" + (today.count == 1 ? " expires" : "s expire") + " today"
                         Section(header: SectionHeader(text: todayLabel, color: .sproutGreen)) {
@@ -81,9 +84,12 @@ struct ContentView: View {
                         }
                     }
                     
-                    let soon = withinWeekItems()
+                    let soon = groceryItems.filter {
+                        guard let date = $0.expirationDate else { return false }
+                        return !date.isToday && (date.isTomorrow || date.isWithin(days: 7))
+                    }
                     if !soon.isEmpty {
-                        let soonLabel = "\(soon.count != 1 ? "These" : "This") \(soon.count) item" + (soon.count == 1 ? " will" : "s will") + " expire within 7 days"
+                        let soonLabel = "\(soon.count != 1 ? "These" : "This") \(soon.count) item" + (soon.count == 1 ? " will" : "s will") + " expire within a week"
                         Section(header: SectionHeader(text: soonLabel, color: .sproutGreen)) {
                             ForEach(soon) { item in
                                 GroceryItemGridView(item: item)
@@ -91,9 +97,12 @@ struct ContentView: View {
                         }
                     }
                     
-                    let later = afterWeekItems()
+                    let later = groceryItems.filter {
+                        guard let date = $0.expirationDate else { return false }
+                        return !date.isWithin(days: 7) && date > Date()
+                    }
                     if !later.isEmpty {
-                        let laterLabel = "\(later.count != 1 ? "These" : "This") \(later.count) item" + (later.count == 1 ? " expires" : "s expire") + " after 7 days"
+                        let laterLabel = "\(later.count != 1 ? "These" : "This") \(later.count) item" + (later.count == 1 ? " expires" : "s expire") + " after a week"
                         Section(header: SectionHeader(text: laterLabel, color: .sproutGreen)) {
                             ForEach(later) { item in
                                 GroceryItemGridView(item: item)
@@ -139,28 +148,6 @@ struct ContentView: View {
             if containerHeight < 1000 {
                 Spacer()
             }
-        }
-    }
-    
-    private func expiredItems() -> [GroceryItem] {
-        groceryItems.filter { $0.expirationDate?.isExpired == true }
-    }
-    
-    private func todayItems() -> [GroceryItem] {
-        groceryItems.filter { $0.expirationDate?.isToday == true }
-    }
-    
-    private func withinWeekItems() -> [GroceryItem] {
-        groceryItems.filter {
-            guard let date = $0.expirationDate else { return false }
-            return !date.isToday && (date.isTomorrow || date.isWithin(days: 7))
-        }
-    }
-    
-    private func afterWeekItems() -> [GroceryItem] {
-        groceryItems.filter {
-            guard let date = $0.expirationDate else { return false }
-            return !date.isWithin(days: 7) && date > Date()
         }
     }
 }
