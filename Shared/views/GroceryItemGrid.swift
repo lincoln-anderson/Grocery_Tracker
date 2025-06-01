@@ -114,36 +114,36 @@ struct GroceryItemGrid: View {
             
             Spacer()
             
-            VStack {
-                Button("Add Item") {
-                    showingAddSheet = true
-                }
-                .buttonStyle(SproutsButtonStyle(color: .green))
-                .sheet(isPresented: $showingAddSheet) {
-                    AddItemView(
-                        isPresented: $showingAddSheet,
-                        expirationDate: Date(),
-                        purchaseDate: Date(),
-                        quantity: 1
-                    )
-                    .environment(\.managedObjectContext, viewContext)
-                }
-                
-                
-                Button("Mark Item as Used") {
-                    showingRemoveSheet = true
-                }
-                .buttonStyle(SproutsButtonStyle(color: .green))
-                .sheet(isPresented: $showingRemoveSheet) {
-                    UsedGroceryView(
-                        isPresented: $showingRemoveSheet,
-                        filterString: $testString
-                    )
-                    .environment(\.managedObjectContext, viewContext)
-                }
-                
-                
-            }
+//            VStack {
+//                Button("Add Item") {
+//                    showingAddSheet = true
+//                }
+//                .buttonStyle(SproutsButtonStyle(color: .green))
+//                .sheet(isPresented: $showingAddSheet) {
+//                    AddItemView(
+//                        isPresented: $showingAddSheet,
+//                        expirationDate: Date(),
+//                        purchaseDate: Date(),
+//                        quantity: 1
+//                    )
+//                    .environment(\.managedObjectContext, viewContext)
+//                }
+//                
+//                
+//                Button("Mark Item as Used") {
+//                    showingRemoveSheet = true
+//                }
+//                .buttonStyle(SproutsButtonStyle(color: .green))
+//                .sheet(isPresented: $showingRemoveSheet) {
+//                    UsedGroceryView(
+//                        isPresented: $showingRemoveSheet,
+//                        filterString: $testString
+//                    )
+//                    .environment(\.managedObjectContext, viewContext)
+//                }
+//                
+//                
+//            }
             
             if containerHeight < 1000 {
                 Spacer()
