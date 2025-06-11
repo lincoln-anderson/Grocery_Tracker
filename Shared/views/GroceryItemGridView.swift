@@ -83,7 +83,7 @@ struct GroceryItemGridView_Previews: PreviewProvider {
             Button("Add Item") {}
                 .buttonStyle(SproutsButtonStyle(color: .green))
 
-            Button("Mark Item as Used") {}
+            Button("Mark as Used") {}
                 .buttonStyle(SproutsButtonStyle(color: .green))
         }
         .previewLayout(.sizeThatFits)
