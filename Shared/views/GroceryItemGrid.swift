@@ -31,6 +31,8 @@ struct GroceryItemGrid: View {
     @State var showingAlert = false
     @State var testString = ""
     @State private var git = Git(id: 1, login: "lincoln")
+    @State private var scannedCode: String? = nil
+    @State private var showingScanner = false
     
     var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
     var containerHeight: CGFloat = UIScreen.main.bounds.height
@@ -113,6 +115,21 @@ struct GroceryItemGrid: View {
             }
             
             Spacer()
+            
+            VStack(spacing: 20) {
+                if let code = scannedCode {
+                    Text("Scanned Barcode: \(code)")
+                        .padding()
+                }
+                
+                Button("Scan Barcode") {
+                    showingScanner = true
+                }
+                .sheet(isPresented: $showingScanner) {
+                    BarcodeScannerView(ScannedCode: $scannedCode)
+                }
+            }
+            .padding()
             
             HStack {
                 Button("Add Item") {
