@@ -130,7 +130,7 @@ struct GroceryItemGrid: View {
                 }
                 
                 
-                Button("Mark Item as Used") {
+                Button("Mark as Used") {
                     showingRemoveSheet = true
                 }
                 .buttonStyle(SproutsButtonStyle(color: .green))

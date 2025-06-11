@@ -25,7 +25,7 @@ struct ProfileView: View {
         if expired.count != 0 {
             HStack {
                 Text("you have \(expired.count) expired items. Would you like to mark them as uses or thrown out?").foregroundColor(.sproutGreen)
-                Button("Mark Item as Used") {
+                Button("Mark as Used") {
                     showingRemoveSheet = true
                 }
                 .buttonStyle(SproutsButtonStyle(color: .green))
