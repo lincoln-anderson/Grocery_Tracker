@@ -62,7 +62,9 @@ struct GroceryItemGrid: View {
                     Text("Tap the \"Add Item\" button to add your groceries and begin tracking the expiration dates")
                         .bold()
                         .font(.title)
+                        .foregroundColor(.sproutGreen)
                         .multilineTextAlignment(.center)
+                        .padding(.horizontal)
                 }
                 
                 LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
@@ -116,20 +118,20 @@ struct GroceryItemGrid: View {
             
             Spacer()
             
-            VStack(spacing: 20) {
-                if let code = scannedCode {
-                    Text("Scanned Barcode: \(code)")
-                        .padding()
-                }
-                
-                Button("Scan Barcode") {
-                    showingScanner = true
-                }
-                .sheet(isPresented: $showingScanner) {
-                    BarcodeScannerView(ScannedCode: $scannedCode)
-                }
-            }
-            .padding()
+//            VStack(spacing: 20) {
+//                if let code = scannedCode {
+//                    Text("Scanned Barcode: \(code)")
+//                        .padding()
+//                }
+//
+//                Button("Scan Barcode") {
+//                    showingScanner = true
+//                }
+//                .sheet(isPresented: $showingScanner) {
+//                    BarcodeScannerView(ScannedCode: $scannedCode)
+//                }
+//            }
+//            .padding()
             
             HStack {
                 Button("Add Item") {

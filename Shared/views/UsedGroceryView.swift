@@ -44,7 +44,12 @@ struct UsedGroceryView: View {
     private func delete(_ item: GroceryItem) {
         withAnimation {
             viewContext.delete(item)
-            try? viewContext.save()
+            do {
+                try viewContext.save()
+            } catch {
+                print("Core Data save error: \(error.localizedDescription)")
+            }
+
         }
     }
 }
