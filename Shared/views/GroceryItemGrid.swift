@@ -172,6 +172,28 @@ struct GroceryItemGrid: View {
     }
 }
 
+
+
+struct SproutsButtonStyle: ButtonStyle {
+    let color: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline)
+            .foregroundColor(.sproutGreen)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(configuration.isPressed ? 0.05 : 0.1), radius: 2, x: 0, y: 2)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .padding(.horizontal)
+    }
+}
+
+
+
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         GroceryItemGrid()
