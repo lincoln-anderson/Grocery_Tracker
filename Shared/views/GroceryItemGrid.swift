@@ -68,57 +68,16 @@ struct GroceryItemGrid: View {
                             .padding(.horizontal)
                     }
                     
+                    let sections = buildSections(from: groceryItems)
+                    
+                    
+                    
                     LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                        let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
-                        if !expired.isEmpty {
-                            let expiredLabel = "\(expired.count != 1 ? "These" : "This") \(expired.count) item" + (expired.count == 1 ? " has" : "s have") + " expired!"
-                            
-                            Section(header: SectionHeader(text: expiredLabel, color: .red)) {
-                                ForEach(expired) { item in
-                                    NavigationLink(destination: ItemDetailView(item: item)) {
-                                        
-                                        
-                                        GroceryItemGridCard(item: item)
-                                    }
-                                }
-                            }
-                        }
-                        let today = groceryItems.filter { $0.expirationDate?.isToday == true }
                         
-                        if !today.isEmpty {
-                            let todayLabel = "\(today.count != 1 ? "These" : "This") \(today.count) item" + (today.count == 1 ? " expires" : "s expire") + " today"
-                            Section(header: SectionHeader(text: todayLabel, color: .sproutGreen)) {
-                                ForEach(today) { item in
-                                    GroceryItemGridCard(item: item)
-                                }
-                            }
+                        ForEach(sections, id: \.title) { section in
+                            GroceryItemGridSection(section: section)
                         }
                         
-                        let soon = groceryItems.filter {
-                            guard let date = $0.expirationDate else { return false }
-                            return !date.isToday && (date.isTomorrow || date.isWithin(days: 7))
-                        }
-                        if !soon.isEmpty {
-                            let soonLabel = "\(soon.count != 1 ? "These" : "This") \(soon.count) item" + (soon.count == 1 ? " will" : "s will") + " expire within a week"
-                            Section(header: SectionHeader(text: soonLabel, color: .sproutGreen)) {
-                                ForEach(soon) { item in
-                                    GroceryItemGridCard(item: item)
-                                }
-                            }
-                        }
-                        
-                        let later = groceryItems.filter {
-                            guard let date = $0.expirationDate else { return false }
-                            return !date.isWithin(days: 7) && date > Date()
-                        }
-                        if !later.isEmpty {
-                            let laterLabel = "\(later.count != 1 ? "These" : "This") \(later.count) item" + (later.count == 1 ? " expires" : "s expire") + " after a week"
-                            Section(header: SectionHeader(text: laterLabel, color: .sproutGreen)) {
-                                ForEach(later) { item in
-                                    GroceryItemGridCard(item: item)
-                                }
-                            }
-                        }
                     }
                 }
                 HStack {
@@ -176,8 +135,35 @@ struct GroceryItemGrid: View {
                 Spacer()
             }
         }
+        
     }
+    
+    func buildSections(from items: FetchedResults<GroceryItem>) -> [GrocerySection] {
+        let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
+        let today = groceryItems.filter { $0.expirationDate?.isToday == true }
+        let soon = groceryItems.filter {
+            guard let date = $0.expirationDate else { return false }
+            return !date.isToday && (date.isTomorrow || date.isWithin(days: 7))
+        }
+        let later = groceryItems.filter {
+            guard let date = $0.expirationDate else { return false }
+            return !date.isWithin(days: 7) && date > Date()
+        }
+        
+        let sections = [
+            expired.isEmpty ? nil : GrocerySection(title: "Expired", color: .red, items: expired),
+            today.isEmpty ? nil : GrocerySection(title: "Expires Today", color: .yellow, items: today),
+            soon.isEmpty ? nil : GrocerySection(title: "Expires Soon", color: .sproutGreen, items: soon),
+            later.isEmpty ? nil : GrocerySection(title: "Expires Later", color: .sproutGreen, items: later),
+        ].compactMap { $0 }
+        print(sections)
+        return sections
+        
+    }
+    
 }
+
+
 
 
 
@@ -197,6 +183,13 @@ struct SproutsButtonStyle: ButtonStyle {
             .padding(.horizontal)
     }
 }
+
+struct GrocerySection {
+    let title: String
+    let color: Color
+    let items: [GroceryItem]
+}
+
 
 
 
