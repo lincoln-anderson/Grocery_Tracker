@@ -10,12 +10,6 @@ struct Git: Codable, Identifiable {
     let login: String
 }
 
-//func fetchGit() async throws -> Git {
-//    let url = URL(string: "https://api.github.com/users/lincoln-anderson")
-//    let (data, _) = try await URLSession.shared.data(from: url!)
-//    return try JSONDecoder().decode(Git.self, from: data)
-//}
-
 struct GroceryItemGrid: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.colorScheme) var colorScheme
@@ -45,18 +39,6 @@ struct GroceryItemGrid: View {
     
     var body: some View {
         VStack {
-            //            if #available(iOS 15.0, *) {
-            //                Text(git.login)
-            //                    .task {
-            //                        do {
-            //                            git = try await fetchGit()
-            //                        } catch {
-            //                            print("bad")
-            //                        }
-            //                    }
-            //            } else {
-            //                // Fallback on earlier versions
-            //            }
             NavigationStack{
                 ScrollView {
                     if groceryItems.isEmpty {
@@ -69,73 +51,16 @@ struct GroceryItemGrid: View {
                     }
                     
                     let sections = buildSections(from: groceryItems)
-                    
-                    
-                    
                     LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                        
                         ForEach(sections, id: \.title) { section in
                             GroceryItemGridSection(section: section)
                         }
-                        
                     }
                 }
-                HStack {
-                    Button("Add Item") {
-                        showingAddSheet = true
-                    }
-                    .buttonStyle(SproutsButtonStyle(color: .green))
-                    .sheet(isPresented: $showingAddSheet) {
-                        AddItemView(
-                            isPresented: $showingAddSheet,
-                            expirationDate: Date(),
-                            purchaseDate: Date(),
-                            quantity: 1
-                        )
-                        .environment(\.managedObjectContext, viewContext)
-                    }
-                    
-                    
-                    Button("Mark as Used") {
-                        showingRemoveSheet = true
-                    }
-                    .buttonStyle(SproutsButtonStyle(color: .green))
-                    .sheet(isPresented: $showingRemoveSheet) {
-                        UsedGroceryView(
-                            isPresented: $showingRemoveSheet,
-                            filterString: $testString
-                        )
-                        .environment(\.managedObjectContext, viewContext)
-                    }
-                    
-                    
-                }
-                .padding(.bottom, 8)
-                
+                AddandRemoveButtonView(showingAddSheet: $showingAddSheet, showingRemoveSheet: $showingRemoveSheet, filterText: $testString)
             }
-            
             Spacer()
-            
-            //            VStack(spacing: 20) {
-            //                if let code = scannedCode {
-            //                    Text("Scanned Barcode: \(code)")
-            //                        .padding()
-            //                }
-            //
-            //                Button("Scan Barcode") {
-            //                    showingScanner = true
-            //                }
-            //                .sheet(isPresented: $showingScanner) {
-            //                    BarcodeScannerView(ScannedCode: $scannedCode)
-            //                }
-            //            }
-            //            .padding()
-            
-            if containerHeight < 1000 {
-                Spacer()
-            }
         }
-        
     }
     
     func buildSections(from items: FetchedResults<GroceryItem>) -> [GrocerySection] {

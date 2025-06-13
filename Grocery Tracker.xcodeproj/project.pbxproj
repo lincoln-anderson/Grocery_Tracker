@@ -15,6 +15,8 @@
 		01461BC82DEE4F210071B0E3 /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01461BC62DEE4F170071B0E3 /* BarcodeScannerView.swift */; };
 		0164D9132DFC96AC00DAE61E /* GroceryItemGridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0164D9122DFC96A100DAE61E /* GroceryItemGridSection.swift */; };
 		0164D9142DFC96AC00DAE61E /* GroceryItemGridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0164D9122DFC96A100DAE61E /* GroceryItemGridSection.swift */; };
+		0164D9182DFC9A7C00DAE61E /* AddandRemoveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0164D9172DFC9A6E00DAE61E /* AddandRemoveButtonView.swift */; };
+		0164D9192DFC9A7C00DAE61E /* AddandRemoveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0164D9172DFC9A6E00DAE61E /* AddandRemoveButtonView.swift */; };
 		01A7CCB42638946C00A5A40B /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCB32638946C00A5A40B /* Tests_iOS.swift */; };
 		01A7CCBF2638946C00A5A40B /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCBE2638946C00A5A40B /* Tests_macOS.swift */; };
 		01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */; };
@@ -72,6 +74,7 @@
 		0144A846283ED27E00F36D0C /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		01461BC62DEE4F170071B0E3 /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
 		0164D9122DFC96A100DAE61E /* GroceryItemGridSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItemGridSection.swift; sourceTree = "<group>"; };
+		0164D9172DFC9A6E00DAE61E /* AddandRemoveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddandRemoveButtonView.swift; sourceTree = "<group>"; };
 		01A045B82DEE6A6C004B175B /* Grocery Tracker (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Grocery Tracker (iOS).entitlements"; sourceTree = "<group>"; };
 		01A7CC962638946A00A5A40B /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grocery_TrackerApp.swift; sourceTree = "<group>"; };
@@ -228,6 +231,7 @@
 		01A7CCDF2639944500A5A40B /* views */ = {
 			isa = PBXGroup;
 			children = (
+				0164D9172DFC9A6E00DAE61E /* AddandRemoveButtonView.swift */,
 				0164D9122DFC96A100DAE61E /* GroceryItemGridSection.swift */,
 				01C1F7EB2DFC8A9B0082D9F7 /* ItemDetailView.swift */,
 				01461BC62DEE4F170071B0E3 /* BarcodeScannerView.swift */,
@@ -434,6 +438,7 @@
 				01A7CCC32638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
 				0144A847283ED27E00F36D0C /* DateExtension.swift in Sources */,
 				01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */,
+				0164D9192DFC9A7C00DAE61E /* AddandRemoveButtonView.swift in Sources */,
 				01FFE3E72DECD61B006EA5D7 /* Profile.swift in Sources */,
 				01A7CCE32640755600A5A40B /* UsedGroceryView.swift in Sources */,
 				01FFE3EA2DECD9EA006EA5D7 /* SproutsHeader.swift in Sources */,
@@ -461,6 +466,7 @@
 				0144A848283ED27E00F36D0C /* DateExtension.swift in Sources */,
 				01A7CCDE2639943300A5A40B /* AddItemView.swift in Sources */,
 				01FFE3E82DECD61B006EA5D7 /* Profile.swift in Sources */,
+				0164D9182DFC9A7C00DAE61E /* AddandRemoveButtonView.swift in Sources */,
 				01A7CCE42640755600A5A40B /* UsedGroceryView.swift in Sources */,
 				01FFE3EB2DECD9EA006EA5D7 /* SproutsHeader.swift in Sources */,
 				0164D9132DFC96AC00DAE61E /* GroceryItemGridSection.swift in Sources */,
