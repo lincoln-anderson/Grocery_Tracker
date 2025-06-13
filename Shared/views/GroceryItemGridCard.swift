@@ -3,7 +3,7 @@
 
 import SwiftUI
 
-struct GroceryItemGridView: View {
+struct GroceryItemGridCard: View {
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -15,9 +15,10 @@ struct GroceryItemGridView: View {
 
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(item.name?.capitalized ?? "Unnamed")
+                Text(item.displayName)
                     .font(.headline)
                     .bold()
+                    .foregroundColor(.primary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
                     .frame(width: containerWidth / 3, height: 52, alignment: .leading)
@@ -62,7 +63,7 @@ struct GroceryItemGridView_Previews: PreviewProvider {
         }()
 
         return VStack(spacing: 16) {
-            GroceryItemGridView(item: item)
+            GroceryItemGridCard(item: item)
                 .environment(\.managedObjectContext, viewContext)
         }
         .previewLayout(.sizeThatFits)
