@@ -16,7 +16,7 @@ struct Git: Codable, Identifiable {
 //    return try JSONDecoder().decode(Git.self, from: data)
 //}
 
-struct ContentView: View {
+struct GroceryItemGrid: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.colorScheme) var colorScheme
     
@@ -154,7 +154,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        GroceryItemGrid()
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .preferredColorScheme(.dark)
     }
