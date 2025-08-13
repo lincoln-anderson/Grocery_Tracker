@@ -7,7 +7,7 @@ struct GroceryItemGridCard: View {
 
     @Environment(\.colorScheme) var colorScheme
 
-    var item: GroceryItem
+    @ObservedObject var item: GroceryItem
 
     var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
 
@@ -27,7 +27,7 @@ struct GroceryItemGridCard: View {
                     Image(systemName: "calendar")
                         .foregroundColor(.sproutGreen)
                     Text(item.expirationDate?.shortDisplayString ?? "")
-                        .font(.subheadline)
+                        .font(.footnote)
                         .foregroundColor(.secondary)
                 }
 
@@ -35,7 +35,7 @@ struct GroceryItemGridCard: View {
                     Image(systemName: "scalemass")
                         .foregroundColor(.sproutGreen)
                     Text("\(item.quantity) \(item.measurement ?? "")")
-                        .font(.subheadline)
+                        .font(.footnote)
                         .foregroundColor(.secondary)
                 }
             }
