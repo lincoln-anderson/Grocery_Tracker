@@ -19,6 +19,8 @@
 		0164D9192DFC9A7C00DAE61E /* AddandRemoveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0164D9172DFC9A6E00DAE61E /* AddandRemoveButtonView.swift */; };
 		0168371F2E06EA6B00B12E4C /* EditItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0168371E2E06EA5E00B12E4C /* EditItemView.swift */; };
 		016837202E06EA6B00B12E4C /* EditItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0168371E2E06EA5E00B12E4C /* EditItemView.swift */; };
+		016F651A2E4E303000B678EC /* RecipeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016F65192E4E303000B678EC /* RecipeScreen.swift */; };
+		016F651B2E4E303000B678EC /* RecipeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016F65192E4E303000B678EC /* RecipeScreen.swift */; };
 		01A7CCB42638946C00A5A40B /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCB32638946C00A5A40B /* Tests_iOS.swift */; };
 		01A7CCBF2638946C00A5A40B /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CCBE2638946C00A5A40B /* Tests_macOS.swift */; };
 		01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */; };
@@ -78,6 +80,7 @@
 		0164D9122DFC96A100DAE61E /* GroceryItemGridSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItemGridSection.swift; sourceTree = "<group>"; };
 		0164D9172DFC9A6E00DAE61E /* AddandRemoveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddandRemoveButtonView.swift; sourceTree = "<group>"; };
 		0168371E2E06EA5E00B12E4C /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
+		016F65192E4E303000B678EC /* RecipeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeScreen.swift; sourceTree = "<group>"; };
 		01A045B82DEE6A6C004B175B /* Grocery Tracker (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Grocery Tracker (iOS).entitlements"; sourceTree = "<group>"; };
 		01A7CC962638946A00A5A40B /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		01A7CC972638946A00A5A40B /* Grocery_TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grocery_TrackerApp.swift; sourceTree = "<group>"; };
@@ -269,6 +272,7 @@
 				01A7CCE22640755600A5A40B /* UsedGroceryView.swift */,
 				01A7CCDC2639943300A5A40B /* AddItemView.swift */,
 				01A7CCD92638A02200A5A40B /* GroceryItemListView.swift */,
+				016F65192E4E303000B678EC /* RecipeScreen.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -382,7 +386,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					01A7CC9E2638946C00A5A40B = {
 						CreatedOnToolsVersion = 12.5;
@@ -473,6 +477,7 @@
 				01C1F7EC2DFC8AA80082D9F7 /* ItemDetailView.swift in Sources */,
 				01461BC82DEE4F210071B0E3 /* BarcodeScannerView.swift in Sources */,
 				01A7CCC72638946D00A5A40B /* Persistence.swift in Sources */,
+				016F651A2E4E303000B678EC /* RecipeScreen.swift in Sources */,
 				01FFE3E52DECD26D006EA5D7 /* MainTabView.swift in Sources */,
 				01E750C62DEB51C2002E1B0F /* SectionHeader.swift in Sources */,
 				01A7CCC12638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */,
@@ -500,6 +505,7 @@
 				01A7CCDB2638A02200A5A40B /* GroceryItemListView.swift in Sources */,
 				01A7CCC82638946D00A5A40B /* Persistence.swift in Sources */,
 				01A7CCC22638946D00A5A40B /* Grocery_Tracker.xcdatamodeld in Sources */,
+				016F651B2E4E303000B678EC /* RecipeScreen.swift in Sources */,
 				01E750C52DEB51C2002E1B0F /* SectionHeader.swift in Sources */,
 				01C1F7ED2DFC8AA80082D9F7 /* ItemDetailView.swift in Sources */,
 				01A7CCC62638946D00A5A40B /* GroceryItemGrid.swift in Sources */,
@@ -598,6 +604,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -653,6 +660,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -736,8 +744,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -761,8 +771,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

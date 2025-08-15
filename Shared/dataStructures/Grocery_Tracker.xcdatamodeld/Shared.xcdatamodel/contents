@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24270" systemVersion="25A5327h" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="GroceryItem" representedClassName="GroceryItem" syncable="YES" codeGenerationType="class">
         <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="measurement" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="purchasedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="groceryItemIgredient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IngredientItem" inverseName="ingredientGroceryItem" inverseEntity="IngredientItem"/>
+    </entity>
+    <entity name="IngredientItem" representedClassName="IngredientItem" syncable="YES" codeGenerationType="class">
+        <attribute name="measurement" optional="YES" attributeType="String"/>
+        <attribute name="nameSnapshot" optional="YES" attributeType="String"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="unitSnapshot" optional="YES" attributeType="String"/>
+        <relationship name="ingredientGroceryItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GroceryItem" inverseName="groceryItemIgredient" inverseEntity="GroceryItem"/>
+        <relationship name="ingredientRecipe" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecipeItem" inverseName="recipeIngredients" inverseEntity="RecipeItem"/>
+    </entity>
+    <entity name="RecipeItem" representedClassName="RecipeItem" syncable="YES" codeGenerationType="class">
+        <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="estimatedTimeMinutes" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="instructions" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="recipeIngredients" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IngredientItem" inverseName="ingredientRecipe" inverseEntity="IngredientItem"/>
     </entity>
 </model>

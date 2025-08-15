@@ -15,6 +15,10 @@ struct AddItemView: View {
     @Binding var isPresented: Bool
     
     @State var newName: String = ""
+    @State var showNameError: Bool = false
+    
+    @FocusState private var nameFieldFocused: Bool
+    @State private var nameTouched: Bool = false
     
     @State var expirationDate: Date
     
@@ -73,6 +77,18 @@ struct AddItemView: View {
                         .padding(12)
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(nameTouched && newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.red : Color.clear, lineWidth: 2)
+                        )
+                        .focused($nameFieldFocused)
+                        .onTapGesture {
+                            nameTouched = true
+                        }
+                    
+                    if nameTouched && newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Text("Name cannot be empty.").foregroundColor(.red).font(.caption)
+                    }
                 }
                 .padding(.horizontal)
                 HStack() {
@@ -159,6 +175,10 @@ struct AddItemView: View {
                 .padding(.horizontal)
                 
                 Button(action: {
+                    nameTouched = true
+                    if newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        return
+                    }
                     if sendNotification == true {
                         let content = UNMutableNotificationContent()
                         content.title = "\(newName) expires soon!"
@@ -202,6 +222,7 @@ struct AddItemView: View {
                         .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 2)
                         .padding(.horizontal)
                 }
+                .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             
             if containerHeight < 1000 {
@@ -251,3 +272,4 @@ struct AddItemView_Previews: PreviewProvider {
         }
     }
 }
+

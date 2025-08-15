@@ -22,6 +22,8 @@ struct MainTabView: View {
         TabView {
             GroceryItemGrid()
                 .tabItem { Label("Tracker", systemImage: "leaf") }
+            RecipeScreen()
+                .tabItem { Label("Recipes", systemImage: "book") }
             ProfileView()
                 .tabItem { Label("Profile", systemImage: "person") }
         }

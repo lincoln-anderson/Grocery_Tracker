@@ -22,21 +22,21 @@ struct ProfileView: View {
     
     var body: some View {
         let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
-        if expired.count != 0 {
-            HStack {
-                Text("you have \(expired.count) expired items. Would you like to mark them as uses or thrown out?").foregroundColor(.sproutGreen)
-                Button("Mark as Used") {
-                    showingRemoveSheet = true
-                }
-                .buttonStyle(SproutsButtonStyle(color: .green))
-                .sheet(isPresented: $showingRemoveSheet) {
-                    UsedGroceryView(
-                        isPresented: $showingRemoveSheet,
-                        filterString: $testString
-                    )
-                    .environment(\.managedObjectContext, viewContext)
-                }
+        
+        HStack {
+            Text("you have \(expired.count) expired items. Would you like to mark them as uses or thrown out?").foregroundColor(.sproutGreen)
+            Button("Mark as Used") {
+                showingRemoveSheet = true
             }
+            .buttonStyle(SproutsButtonStyle(color: .green))
+            .sheet(isPresented: $showingRemoveSheet) {
+                UsedGroceryView(
+                    isPresented: $showingRemoveSheet,
+                    filterString: $testString
+                )
+                .environment(\.managedObjectContext, viewContext)
+            }
+            
         }
     }
 }

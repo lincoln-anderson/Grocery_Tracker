@@ -44,7 +44,7 @@ struct GroceryItemGrid: View {
                     if groceryItems.isEmpty {
                         Text("Tap the \"Add Item\" button to add your groceries and begin tracking the expiration dates")
                             .bold()
-                            .font(.title)
+                            .font(.title3)
                             .foregroundColor(.sproutGreen)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)

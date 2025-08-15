@@ -19,6 +19,10 @@ struct EditItemView: View {
     @State private var expirationDate: Date = Date()
     @State private var quantity: Int = 1
     @State private var measurement: String = "Oz"
+    @State private var showNameError: Bool = false
+    
+    @FocusState private var nameFieldFocused: Bool
+    @State private var nameTouched: Bool = false
 
     enum Measurements: String, CaseIterable, Identifiable {
         case oz, lb, ml
@@ -40,6 +44,18 @@ struct EditItemView: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(nameTouched && name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.red : Color.clear, lineWidth: 2)
+                    )
+                    .focused($nameFieldFocused)
+                    .onTapGesture {
+                        nameTouched = true
+                    }
+                
+                if nameTouched && name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    Text("Name cannot be empty.").foregroundColor(.red).font(.caption)
+                }
 
                 HStack {
                     VStack(alignment: .leading) {
@@ -87,10 +103,15 @@ struct EditItemView: View {
                 }
 
                 Button("Save Changes") {
+                    showNameError = name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    if showNameError {
+                        return
+                    }
                     updateItem()
                     isPresented = false
                 }
                 .buttonStyle(SproutsButtonStyle(color: .green))
+                .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             .padding()
             .onAppear {
@@ -121,3 +142,4 @@ struct EditItemView: View {
         }
     }
 }
+
