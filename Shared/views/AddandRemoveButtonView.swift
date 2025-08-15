@@ -28,7 +28,7 @@ public struct AddandRemoveButtonView: View {
                     isPresented: $showingAddSheet,
                     expirationDate: Date(),
                     purchaseDate: Date(),
-                    quantity: 1
+                    quantity: ""
                 )
                 .environment(\.managedObjectContext, viewContext)
             }

@@ -11,6 +11,14 @@ struct GroceryItemGridCard: View {
 
     var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
 
+    private var formattedQuantity: String {
+        if item.quantity.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(Int(item.quantity))
+        } else {
+            return String(format: "%.2f", item.quantity)
+        }
+    }
+
     var body: some View {
 
         HStack(alignment: .top, spacing: 12) {
@@ -34,7 +42,7 @@ struct GroceryItemGridCard: View {
                 HStack(spacing: 6) {
                     Image(systemName: "scalemass")
                         .foregroundColor(.sproutGreen)
-                    Text("\(item.quantity) \(item.measurement ?? "")")
+                    Text("\(formattedQuantity) \(item.measurement ?? "")")
                         .font(.footnote)
                         .foregroundColor(.secondary)
                 }
