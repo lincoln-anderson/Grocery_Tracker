@@ -16,6 +16,14 @@ struct ItemDetailView: View {
     
     @ObservedObject var item: GroceryItem
     
+    private var formattedQuantity: String {
+        if item.quantity.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(Int(item.quantity))
+        } else {
+            return String(format: "%.5f", item.quantity)
+        }
+    }
+    
     var daysUntilExpiration: String {
         guard let expiration = item.expirationDate else { return "N/A" }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: expiration).day ?? 0
@@ -113,7 +121,7 @@ struct ItemDetailView: View {
                         Text("Quantity & Measurement")
                             .font(.caption)
                             .foregroundColor(.sproutGreen)
-                        Text("\(item.quantity) \(item.measurement ?? "")")
+                        Text("\(formattedQuantity) \(item.measurement ?? "")")
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(.systemGray6))
@@ -138,3 +146,4 @@ struct ItemDetailView: View {
         }
     }
 }
+

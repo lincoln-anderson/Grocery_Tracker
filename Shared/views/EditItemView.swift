@@ -17,7 +17,7 @@ struct EditItemView: View {
     @State private var name: String = ""
     @State private var purchaseDate: Date = Date()
     @State private var expirationDate: Date = Date()
-    @State private var quantity: Int = 1
+    @State private var quantity: String = ""
     @State private var measurement: String = "Oz"
     @State private var showNameError: Bool = false
     
@@ -68,6 +68,8 @@ struct EditItemView: View {
                             .background(Color(.systemGray6))
                             .cornerRadius(10)
                     }
+                    
+                    Spacer()
 
                     VStack(alignment: .leading) {
                         Text("Expiration Date")
@@ -87,11 +89,21 @@ struct EditItemView: View {
                         .foregroundColor(.sproutGreen)
 
                     HStack {
-                        Picker("Quantity", selection: $quantity) {
-                            ForEach(1...100, id: \.self) { Text("\($0)") }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(maxWidth: .infinity)
+                        TextField("Item weight", text: $quantity)
+                            .padding(12)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10)
+                            .keyboardType(.decimalPad)
+                            .onChange(of: quantity) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                // Only allow one period
+                                let parts = filtered.split(separator: ".", omittingEmptySubsequences: false)
+                                if parts.count <= 2 {
+                                    quantity = parts.joined(separator: ".")
+                                } else {
+                                    quantity = parts[0] + "." + parts[1]
+                                }
+                            }
 
                         Picker("Measurement", selection: $measurement) {
                             ForEach(Measurements.allCases) { Text($0.rawValue.capitalized) }
@@ -124,7 +136,7 @@ struct EditItemView: View {
         name = item.name ?? ""
         purchaseDate = item.purchasedDate ?? Date()
         expirationDate = item.expirationDate ?? Date()
-        quantity = Int(item.quantity)
+        quantity = String(item.quantity)
         measurement = item.measurement ?? "Oz"
     }
 
@@ -132,7 +144,7 @@ struct EditItemView: View {
         item.name = name
         item.purchasedDate = purchaseDate
         item.expirationDate = expirationDate
-        item.quantity = Int16(quantity)
+        item.quantity = Double(quantity) ?? 1
         item.measurement = measurement
 
         do {

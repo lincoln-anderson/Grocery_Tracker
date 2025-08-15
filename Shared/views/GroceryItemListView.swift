@@ -17,7 +17,7 @@ struct GroceryItemListView: View {
     
     var passedGroceryItemExpirationDate: Date
     
-    var passedGroceryItemQuantity: Int16
+    var passedGroceryItemQuantity: Double
     
     var passedGroceryItemMeasurement: String
     
@@ -60,7 +60,7 @@ struct GroceryItemListView_Previews: PreviewProvider {
         let item = GroceryItem(context: viewContext)
         item.expirationDate = Date()
         item.name = "Sample"
-        item.quantity = 10
+        item.quantity = Double(10)
         item.measurement = "Oz"
         
         return GroceryItemListView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!, passedGroceryItemQuantity: item.quantity, passedGroceryItemMeasurement: item.measurement!).environment(\.managedObjectContext, viewContext)

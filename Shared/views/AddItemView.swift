@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+private let AddItemDateFormat: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "E, MMM d"
+    return formatter
+}()
+
 struct AddItemView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
@@ -24,7 +30,7 @@ struct AddItemView: View {
     
     @State var purchaseDate: Date
     
-    @State var quantity: Int = 1
+    @State var quantity: String = ""
     
     @State var measurement: String = Measurements.oz.rawValue
     
@@ -43,12 +49,6 @@ struct AddItemView: View {
     }
     
     var containerHeight:CGFloat = UIScreen.main.bounds.height
-    
-    static let DateFormat: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E, MMM d"
-        return formatter
-    }()
     
     var body: some View {
         VStack{
@@ -106,7 +106,7 @@ struct AddItemView: View {
                     }
                     Spacer()
                     
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Expiration Date")
                             .font(.subheadline)
                             .foregroundColor(.sproutGreen)
@@ -125,29 +125,30 @@ struct AddItemView: View {
                         .font(.subheadline)
                         .foregroundColor(.sproutGreen)
                     
-                    HStack(spacing: 24) {
-                        Picker("Quantity", selection: $quantity) {
-                            ForEach(1...100, id: \.self) {
-                                Text("\($0)")
+                    HStack {
+                        TextField("Item weight", text: $quantity)
+                            .padding(12)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10)
+                            .keyboardType(.decimalPad)
+                            .onChange(of: quantity) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                // Only allow one period
+                                let parts = filtered.split(separator: ".", omittingEmptySubsequences: false)
+                                if parts.count <= 2 {
+                                    quantity = parts.joined(separator: ".")
+                                } else {
+                                    quantity = parts[0] + "." + parts[1]
+                                }
                             }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .clipped()
-                        .pickerStyle(.wheel)
-                        
+
                         Picker("Measurement", selection: $measurement) {
-                            ForEach(Measurements.allCases) { measurement in
-                                Text(measurement.rawValue.capitalized)
-                            }
+                            ForEach(Measurements.allCases) { Text($0.rawValue.capitalized) }
                         }
-                        .frame(maxWidth: .infinity)
-                        .clipped()
                         .pickerStyle(.wheel)
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(height: 120)
-                    .padding(12)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
+                    .frame(height: 100)
                 }
                 .padding(.horizontal)
                 VStack(alignment: .leading, spacing: 12) {
@@ -183,7 +184,7 @@ struct AddItemView: View {
                         let content = UNMutableNotificationContent()
                         content.title = "\(newName) expires soon!"
                         
-                        let formattedDate = AddItemView.DateFormat.string(from: self.expirationDate)
+                        let formattedDate = AddItemDateFormat.string(from: self.expirationDate)
                         content.subtitle = "Expiration Date \(formattedDate)"
                         content.sound = UNNotificationSound.default
                         
@@ -205,10 +206,10 @@ struct AddItemView: View {
                         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
                         UNUserNotificationCenter.current().add(request)
                         
-                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Int16(quantity), measurement: measurement)
+                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Double(quantity) ?? 1, measurement: measurement)
                         self.isPresented = false
                     } else {
-                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Int16(quantity), measurement: measurement)
+                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Double(quantity) ?? 1, measurement: measurement)
                         self.isPresented = false
                     }
                 }) {
@@ -233,7 +234,7 @@ struct AddItemView: View {
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
-    func newItem(newName: String, expirationDate: Date, purchaseDate: Date, quantity: Int16, measurement: String) {
+    func newItem(newName: String, expirationDate: Date, purchaseDate: Date, quantity: Double, measurement: String) {
         let newItem = GroceryItem(context: viewContext)
         
         newItem.name = newName
@@ -262,7 +263,7 @@ struct AddItemView_Previews: PreviewProvider {
     @State static var isShowing = false
     @State static var newName = ""
     @State static var date = Date()
-    @State static var quantity = 1
+    @State static var quantity = "1"
     static var previews: some View {
         Group {
             AddItemView(isPresented: $isShowing, newName: newName, expirationDate: date, purchaseDate: date, quantity: quantity, measurement: newName)
