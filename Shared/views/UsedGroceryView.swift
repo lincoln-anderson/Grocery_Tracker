@@ -73,7 +73,7 @@ struct GroceryItemCard: View {
                 Text(item.name?.capitalized ?? "Unnamed")
                     .font(.headline)
                 Spacer()
-                Text("\(item.quantity) \(item.measurement ?? "")")
+                Text(item.inventorySummary)
                     .font(.subheadline)
                     .foregroundStyle(Color.sproutGreen)
             }

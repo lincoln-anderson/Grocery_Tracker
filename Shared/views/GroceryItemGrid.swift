@@ -25,8 +25,6 @@ struct GroceryItemGrid: View {
     @State var showingAlert = false
     @State var testString = ""
     @State private var git = Git(id: 1, login: "lincoln")
-    @State private var scannedCode: String? = nil
-    @State private var showingScanner = false
     
     let columns = [GridItem(.adaptive(minimum: 180))]
     

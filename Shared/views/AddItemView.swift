@@ -9,6 +9,14 @@ import CoreData
 import SwiftUI
 import UserNotifications
 
+private enum ProductLookupState: Equatable {
+    case idle
+    case loading
+    case found(name: String, details: String?)
+    case notFound
+    case failed
+}
+
 struct AddItemView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -18,24 +26,24 @@ struct AddItemView: View {
     @State var expirationDate: Date
     @State var purchaseDate: Date
     @State var quantity: Int = 1
-    @State var measurement: String = Measurements.oz.rawValue
     @State var sendNotification: Bool = true
     @State var notificationTime: Int = 3
+    @State private var barcode = ""
+    @State private var brand = ""
+    @State private var packageSize = ""
+    @State private var productImageURL: URL?
+    @State private var showingScanner = false
+    @State private var scannerError: BarcodeScannerError?
+    @State private var productLookupState = ProductLookupState.idle
     @State private var validationError: AddItemValidationError?
     @State private var persistenceError: (any Error)?
     @State private var notificationError: (any Error)?
     @State private var isSaving = false
 
+    private let productLookupService = OpenFoodFactsProductLookupService()
+
     private enum ReminderError: Error {
         case authorizationDenied
-    }
-
-    enum Measurements: String, CaseIterable, Identifiable {
-        case oz
-        case lb
-        case ml
-
-        var id: String { rawValue }
     }
 
     var body: some View {
@@ -49,14 +57,34 @@ struct AddItemView: View {
 
                         AddItemNameSection(name: $newName)
 
+                        AddItemBarcodeSection(
+                            barcode: Binding(
+                                get: { barcode },
+                                set: { value in
+                                    barcode = value
+                                    productLookupState = .idle
+                                    productImageURL = nil
+                                }
+                            ),
+                            lookupState: productLookupState,
+                            scanAction: { showingScanner = true },
+                            lookupAction: {
+                                Task {
+                                    await lookupProduct(barcode)
+                                }
+                            }
+                        )
+
+                        AddItemProductDetailsSection(
+                            brand: $brand,
+                            packageSize: $packageSize,
+                            packageCount: $quantity,
+                            imageURL: productImageURL
+                        )
+
                         AddItemDatesSection(
                             purchaseDate: $purchaseDate,
                             expirationDate: $expirationDate
-                        )
-
-                        AddItemQuantitySection(
-                            quantity: $quantity,
-                            measurement: $measurement
                         )
 
                         AddItemNotificationSection(
@@ -77,6 +105,36 @@ struct AddItemView: View {
                 .padding(.vertical)
             }
             .scrollDismissesKeyboard(.interactively)
+        }
+        .sheet(isPresented: $showingScanner) {
+            BarcodeScannerSheet(
+                onScan: { code in
+                    barcode = code
+                    showingScanner = false
+
+                    Task {
+                        await lookupProduct(code)
+                    }
+                },
+                onError: { error in
+                    scannerError = error
+                    showingScanner = false
+                }
+            )
+        }
+        .alert("Barcode Scanner Unavailable", item: $scannerError) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { error in
+            switch error {
+            case .unsupported:
+                Text("Barcode scanning isn’t supported on this device. Enter the barcode manually instead.")
+            case .cameraUnavailable:
+                Text("The camera isn’t available. Check camera permission in Settings or enter the barcode manually.")
+            case .invalidBarcode:
+                Text("That barcode couldn’t be read. Try scanning again or enter its digits manually.")
+            case .scanningFailed:
+                Text("Scanning couldn’t start. Please try again or enter the barcode manually.")
+            }
         }
         .alert("Invalid Item", item: $validationError) { _ in
             Button("OK", role: .cancel) {}
@@ -99,6 +157,37 @@ struct AddItemView: View {
             }
         } message: { _ in
             Text("The item was saved, but its expiration reminder couldn’t be scheduled.")
+        }
+    }
+
+    private func lookupProduct(_ code: String) async {
+        productLookupState = .loading
+
+        do {
+            let product: ProductLookupResult
+            if let savedProduct = try savedProduct(for: code) {
+                product = savedProduct
+            } else {
+                product = try await productLookupService.product(for: code)
+            }
+            let detailValues = [product.brand, product.quantity].compactMap { $0 }
+            let details = detailValues.isEmpty ? nil : detailValues.formatted()
+
+            barcode = product.barcode.isEmpty ? code : product.barcode
+            brand = product.brand ?? ""
+            packageSize = product.quantity ?? ""
+            productImageURL = product.imageURL
+            if newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                newName = product.name
+            }
+            productLookupState = .found(name: product.name, details: details)
+        } catch ProductLookupError.productNotFound,
+                ProductLookupError.missingProductName {
+            productLookupState = .notFound
+        } catch is CancellationError {
+            return
+        } catch {
+            productLookupState = .failed
         }
     }
 
@@ -129,7 +218,10 @@ struct AddItemView: View {
                 expirationDate: expirationDate,
                 purchaseDate: purchaseDate,
                 quantity: Int16(quantity),
-                measurement: measurement
+                barcode: barcode,
+                brand: brand,
+                packageSize: packageSize,
+                imageURL: productImageURL
             )
         } catch {
             persistenceError = error
@@ -194,14 +286,22 @@ struct AddItemView: View {
         expirationDate: Date,
         purchaseDate: Date,
         quantity: Int16,
-        measurement: String
+        barcode: String,
+        brand: String,
+        packageSize: String,
+        imageURL: URL?
     ) throws {
         let newItem = GroceryItem(context: viewContext)
         newItem.name = newName
         newItem.expirationDate = expirationDate
         newItem.purchasedDate = purchaseDate
         newItem.quantity = quantity
-        newItem.measurement = measurement
+        newItem.measurement = nil
+        newItem.barcode = (try? BarcodeNormalizer.normalize(barcode))
+            ?? barcode.nilIfBlank
+        newItem.brand = brand.nilIfBlank
+        newItem.packageSize = packageSize.nilIfBlank
+        newItem.imageURL = imageURL?.absoluteString
 
         do {
             try viewContext.save()
@@ -209,6 +309,27 @@ struct AddItemView: View {
             viewContext.delete(newItem)
             throw error
         }
+    }
+
+    private func savedProduct(for code: String) throws -> ProductLookupResult? {
+        let normalizedBarcode = try BarcodeNormalizer.normalize(code)
+        let request = GroceryItem.fetchRequest()
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "barcode == %@", normalizedBarcode)
+        request.sortDescriptors = [NSSortDescriptor(key: "purchasedDate", ascending: false)]
+
+        guard let item = try viewContext.fetch(request).first,
+              let name = item.name?.nilIfBlank else {
+            return nil
+        }
+
+        return ProductLookupResult(
+            barcode: normalizedBarcode,
+            name: name,
+            brand: item.brand?.nilIfBlank,
+            quantity: item.packageSize?.nilIfBlank,
+            imageURL: item.imageURL.flatMap(URL.init(string:))
+        )
     }
 }
 
@@ -242,6 +363,196 @@ private struct AddItemNameSection: View {
     }
 }
 
+private struct AddItemBarcodeSection: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    @Binding var barcode: String
+    let lookupState: ProductLookupState
+    let scanAction: () -> Void
+    let lookupAction: () -> Void
+
+    var body: some View {
+        let buttonLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+            : AnyLayout(HStackLayout(spacing: 8))
+
+        LabeledField(title: "Barcode (Optional)") {
+            TextField("Enter barcode digits", text: $barcode)
+                .keyboardType(.numberPad)
+                .textContentType(.none)
+                .padding(12)
+                .background(Color(.systemGray6))
+                .clipShape(.rect(cornerRadius: 10))
+
+            buttonLayout {
+                Button(action: scanAction) {
+                    Label("Scan Barcode", systemImage: "barcode.viewfinder")
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Color.sproutGreen)
+
+                Button(action: lookupAction) {
+                    Label("Look Up Product", systemImage: "magnifyingglass")
+                }
+                .buttonStyle(.bordered)
+                .disabled(
+                    barcode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        || lookupState == .loading
+                )
+            }
+
+            ProductLookupStatusView(state: lookupState)
+        }
+        .padding(.horizontal)
+    }
+
+}
+
+private struct ProductLookupStatusView: View {
+    let state: ProductLookupState
+
+    var body: some View {
+        Group {
+            switch state {
+        case .idle:
+            Text("Scan a package or enter its barcode to look up the product.")
+                .foregroundStyle(.secondary)
+        case .loading:
+            ProgressView("Looking up product…")
+        case let .found(name, details):
+            VStack(alignment: .leading, spacing: 2) {
+                Label("Found: \(name)", systemImage: "checkmark.circle.fill")
+                    .foregroundStyle(Color.sproutGreen)
+
+                if let details {
+                    Text(details)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        case .notFound:
+            Label(
+                "Product not found. You can still enter the item name manually.",
+                systemImage: "questionmark.circle"
+            )
+            .foregroundStyle(.secondary)
+        case .failed:
+            Label(
+                "Product lookup failed. Check your connection and try again.",
+                systemImage: "wifi.exclamationmark"
+            )
+            .foregroundStyle(.secondary)
+            }
+        }
+        .font(.caption)
+    }
+}
+
+private struct AddItemProductDetailsSection: View {
+    @Binding var brand: String
+    @Binding var packageSize: String
+    @Binding var packageCount: Int
+    let imageURL: URL?
+
+    var body: some View {
+        LabeledField(title: "Package Details") {
+            if let imageURL {
+                ProductImageView(url: imageURL)
+                    .frame(maxWidth: .infinity)
+            }
+
+            TextField("Brand", text: $brand)
+                .textContentType(.organizationName)
+                .padding(12)
+                .background(Color(.systemGray6))
+                .clipShape(.rect(cornerRadius: 10))
+
+            TextField("Package size (for example, 12 oz)", text: $packageSize)
+                .padding(12)
+                .background(Color(.systemGray6))
+                .clipShape(.rect(cornerRadius: 10))
+
+            Stepper(value: $packageCount, in: 1...100) {
+                LabeledContent("Number of Packages", value: "\(packageCount)")
+            }
+            .padding(12)
+            .background(Color(.systemGray6))
+            .clipShape(.rect(cornerRadius: 10))
+
+            Text(inventorySummary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("Inventory total: \(inventorySummary)")
+        }
+        .padding(.horizontal)
+    }
+
+    private var inventorySummary: String {
+        guard let size = packageSize.nilIfBlank else {
+            return packageCount == 1 ? "1 package" : "\(packageCount) packages"
+        }
+
+        return packageCount == 1 ? size : "\(packageCount) × \(size)"
+    }
+}
+
+struct ProductImageView: View {
+    let url: URL
+
+    var body: some View {
+        AsyncImage(url: url) { phase in
+            switch phase {
+            case let .success(image):
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .accessibilityLabel("Product package")
+            case .failure:
+                Image(systemName: "photo")
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Product image unavailable")
+            case .empty:
+                ProgressView()
+                    .accessibilityLabel("Loading product image")
+            @unknown default:
+                EmptyView()
+            }
+        }
+        .frame(height: 140)
+        .clipShape(.rect(cornerRadius: 12))
+    }
+}
+
+private struct BarcodeScannerSheet: View {
+    @Environment(\.dismiss) private var dismiss
+
+    let onScan: (String) -> Void
+    let onError: (BarcodeScannerError) -> Void
+
+    var body: some View {
+        NavigationStack {
+            BarcodeScannerView(onScan: onScan, onError: onError)
+                .ignoresSafeArea(edges: .bottom)
+                .safeAreaInset(edge: .top) {
+                    Text("Point the camera at a grocery barcode, then tap the highlighted code.")
+                        .font(.callout)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(.thinMaterial)
+                }
+                .navigationTitle("Scan Barcode")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                    }
+                }
+        }
+    }
+}
+
 private struct AddItemDatesSection: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -270,51 +581,6 @@ private struct AddItemDatesSection: View {
                 .clipShape(.rect(cornerRadius: 10))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-private struct AddItemQuantitySection: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .body) private var pickerHeight: CGFloat = 120
-
-    @Binding var quantity: Int
-    @Binding var measurement: String
-
-    var body: some View {
-        let layout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
-            : AnyLayout(HStackLayout(spacing: 16))
-
-        LabeledField(title: "Quantity & Measurement") {
-            layout {
-                Picker("Quantity", selection: $quantity) {
-                    ForEach(1...100, id: \.self) {
-                        Text("\($0)")
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .clipped()
-                .pickerStyle(.wheel)
-
-                Picker("Measurement", selection: $measurement) {
-                    ForEach(AddItemView.Measurements.allCases) { measurement in
-                        Text(measurement.rawValue.capitalized)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .clipped()
-                .pickerStyle(.wheel)
-            }
-            .frame(
-                minHeight: dynamicTypeSize.isAccessibilitySize
-                    ? pickerHeight * 2
-                    : pickerHeight
-            )
-            .padding(12)
-            .background(Color(.systemGray6))
-            .clipShape(.rect(cornerRadius: 10))
-        }
-        .padding(.horizontal)
     }
 }
 

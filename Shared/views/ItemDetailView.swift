@@ -29,6 +29,11 @@ struct ItemDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                if let imageURL = item.imageURL.flatMap(URL.init(string:)) {
+                    ProductImageView(url: imageURL)
+                        .frame(maxWidth: .infinity)
+                }
+
                 Text("Grocery Item Details")
                     .font(.largeTitle)
                     .bold()
@@ -47,6 +52,27 @@ struct ItemDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
                         .clipShape(.rect(cornerRadius: 8))
+                }
+
+                if item.brand?.nilIfBlank != nil ||
+                    item.packageSize?.nilIfBlank != nil ||
+                    item.barcode?.nilIfBlank != nil {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Product Information")
+                            .font(.headline)
+
+                        if let brand = item.brand?.nilIfBlank {
+                            detailField(title: "Brand", value: brand)
+                        }
+
+                        if let packageSize = item.packageSize?.nilIfBlank {
+                            detailField(title: "Package Size", value: packageSize)
+                        }
+
+                        if let barcode = item.barcode?.nilIfBlank {
+                            detailField(title: "Barcode", value: barcode)
+                        }
+                    }
                 }
                 
                 // Dates
@@ -91,12 +117,12 @@ struct ItemDetailView: View {
                     
                 }
                 
-                // Quantity & Measurement
+                // Inventory
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Quantity & Measurement")
+                    Text("Inventory")
                         .font(.caption)
                         .foregroundStyle(Color.sproutGreen)
-                    Text("\(item.quantity) \(item.measurement ?? "")")
+                    Text(item.inventorySummary)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
@@ -108,5 +134,18 @@ struct ItemDetailView: View {
             .padding()
         }
     }
-}
 
+    private func detailField(title: LocalizedStringKey, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(Color.sproutGreen)
+            Text(value)
+                .textSelection(.enabled)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.systemGray6))
+                .clipShape(.rect(cornerRadius: 8))
+        }
+    }
+}

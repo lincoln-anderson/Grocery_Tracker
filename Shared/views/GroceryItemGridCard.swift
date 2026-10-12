@@ -29,7 +29,7 @@ struct GroceryItemGridCard: View {
                     Image(systemName: "scalemass")
                         .foregroundStyle(Color.sproutGreen)
                         .accessibilityHidden(true)
-                    Text("\(item.quantity) \(item.measurement ?? "")")
+                    Text(item.inventorySummary)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -53,7 +53,7 @@ struct GroceryItemGridCard: View {
     item.expirationDate = .now
     item.name = "Canned Beans"
     item.quantity = 2
-    item.measurement = "cans"
+    item.packageSize = "15 oz"
 
     return GroceryItemGridCard(item: item)
         .environment(\.managedObjectContext, context)

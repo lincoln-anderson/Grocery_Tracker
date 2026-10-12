@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSCameraReactionEffectGesturesEnabledDefault</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Sprouts uses the camera to scan grocery product barcodes.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
