@@ -47,64 +47,70 @@ struct AddItemView: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack {
-                    Spacer(minLength: 0)
-
-                    VStack(spacing: 20) {
-                        AddItemHeader()
-
-                        AddItemNameSection(name: $newName)
-
-                        AddItemBarcodeSection(
-                            barcode: Binding(
-                                get: { barcode },
-                                set: { value in
-                                    barcode = value
-                                    productLookupState = .idle
-                                    productImageURL = nil
-                                }
-                            ),
-                            lookupState: productLookupState,
-                            scanAction: { showingScanner = true },
-                            lookupAction: {
-                                Task {
-                                    await lookupProduct(barcode)
-                                }
-                            }
-                        )
-
-                        AddItemProductDetailsSection(
-                            brand: $brand,
-                            packageSize: $packageSize,
-                            packageCount: $quantity,
-                            imageURL: productImageURL
-                        )
-
-                        AddItemDatesSection(
-                            purchaseDate: $purchaseDate,
-                            expirationDate: $expirationDate
-                        )
-
-                        AddItemNotificationSection(
-                            sendNotification: $sendNotification,
-                            notificationTime: $notificationTime
-                        )
-
-                        AddItemSaveButton(isSaving: isSaving) {
-                            Task {
-                                await saveItem()
-                            }
+        NavigationStack {
+            Form {
+                AddItemProductSection(
+                    name: $newName,
+                    barcode: Binding(
+                        get: { barcode },
+                        set: { value in
+                            barcode = value
+                            productLookupState = .idle
+                            productImageURL = nil
+                        }
+                    ),
+                    brand: $brand,
+                    imageURL: productImageURL,
+                    lookupState: productLookupState,
+                    scanAction: { showingScanner = true },
+                    lookupAction: {
+                        Task {
+                            await lookupProduct(barcode)
                         }
                     }
+                )
 
-                    Spacer(minLength: 0)
-                }
-                .frame(minHeight: geometry.size.height)
-                .padding(.vertical)
+                AddItemInventorySection(
+                    packageSize: $packageSize,
+                    packageCount: $quantity
+                )
+
+                AddItemDatesSection(
+                    purchaseDate: $purchaseDate,
+                    expirationDate: $expirationDate
+                )
+
+                AddItemNotificationSection(
+                    sendNotification: $sendNotification,
+                    notificationTime: $notificationTime
+                )
             }
             .scrollDismissesKeyboard(.interactively)
+            .navigationTitle("New Grocery Item")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        isPresented = false
+                    }
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        Task {
+                            await saveItem()
+                        }
+                    } label: {
+                        if isSaving {
+                            ProgressView()
+                                .accessibilityLabel("Saving item")
+                        } else {
+                            Text("Save")
+                        }
+                    }
+                    .disabled(isSaving || newName.nilIfBlank == nil)
+                }
+            }
         }
         .sheet(isPresented: $showingScanner) {
             BarcodeScannerSheet(
@@ -212,8 +218,9 @@ struct AddItemView: View {
         isSaving = true
         defer { isSaving = false }
 
+        let savedItem: GroceryItem
         do {
-            try newItem(
+            savedItem = try newItem(
                 newName: validatedName,
                 expirationDate: expirationDate,
                 purchaseDate: purchaseDate,
@@ -221,7 +228,9 @@ struct AddItemView: View {
                 barcode: barcode,
                 brand: brand,
                 packageSize: packageSize,
-                imageURL: productImageURL
+                imageURL: productImageURL,
+                remindersEnabled: sendNotification,
+                reminderDaysBefore: Int16(notificationTime)
             )
         } catch {
             persistenceError = error
@@ -234,14 +243,19 @@ struct AddItemView: View {
         }
 
         do {
-            try await scheduleExpirationReminder()
+            guard let notificationIdentifier = savedItem.notificationIdentifier else {
+                throw ReminderError.authorizationDenied
+            }
+            try await scheduleExpirationReminder(identifier: notificationIdentifier)
             isPresented = false
         } catch {
+            savedItem.notificationIdentifier = nil
+            try? viewContext.save()
             notificationError = error
         }
     }
 
-    private func scheduleExpirationReminder() async throws {
+    private func scheduleExpirationReminder(identifier: String) async throws {
         let notificationCenter = UNUserNotificationCenter.current()
         let isAuthorized = try await notificationCenter.requestAuthorization(
             options: [.alert, .sound]
@@ -273,7 +287,7 @@ struct AddItemView: View {
             repeats: false
         )
         let request = UNNotificationRequest(
-            identifier: UUID().uuidString,
+            identifier: identifier,
             content: content,
             trigger: trigger
         )
@@ -289,8 +303,10 @@ struct AddItemView: View {
         barcode: String,
         brand: String,
         packageSize: String,
-        imageURL: URL?
-    ) throws {
+        imageURL: URL?,
+        remindersEnabled: Bool,
+        reminderDaysBefore: Int16
+    ) throws -> GroceryItem {
         let newItem = GroceryItem(context: viewContext)
         newItem.name = newName
         newItem.expirationDate = expirationDate
@@ -302,13 +318,20 @@ struct AddItemView: View {
         newItem.brand = brand.nilIfBlank
         newItem.packageSize = packageSize.nilIfBlank
         newItem.imageURL = imageURL?.absoluteString
+        newItem.lifecycleState = .active
+        newItem.remindersEnabled = remindersEnabled
+        newItem.reminderDaysBefore = reminderDaysBefore
+        newItem.notificationIdentifier = remindersEnabled ? UUID().uuidString : nil
 
         do {
             try viewContext.save()
+            GroceryWidgetSnapshotStore.refresh(in: viewContext)
         } catch {
             viewContext.delete(newItem)
             throw error
         }
+
+        return newItem
     }
 
     private func savedProduct(for code: String) throws -> ProductLookupResult? {
@@ -333,40 +356,13 @@ struct AddItemView: View {
     }
 }
 
-private struct AddItemHeader: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("New Grocery Item")
-                .font(.title2.bold())
-                .foregroundStyle(Color.sproutGreen)
-                .accessibilityAddTraits(.isHeader)
-                .padding(.top)
-                .padding(.horizontal)
-
-            Divider()
-                .padding(.horizontal)
-        }
-    }
-}
-
-private struct AddItemNameSection: View {
-    @Binding var name: String
-
-    var body: some View {
-        LabeledField(title: "Item Name") {
-            TextField("Item Name", text: $name)
-                .padding(12)
-                .background(Color(.systemGray6))
-                .clipShape(.rect(cornerRadius: 10))
-        }
-        .padding(.horizontal)
-    }
-}
-
-private struct AddItemBarcodeSection: View {
+private struct AddItemProductSection: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    @Binding var name: String
     @Binding var barcode: String
+    @Binding var brand: String
+    let imageURL: URL?
     let lookupState: ProductLookupState
     let scanAction: () -> Void
     let lookupAction: () -> Void
@@ -376,13 +372,21 @@ private struct AddItemBarcodeSection: View {
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
             : AnyLayout(HStackLayout(spacing: 8))
 
-        LabeledField(title: "Barcode (Optional)") {
-            TextField("Enter barcode digits", text: $barcode)
+        Section("Product") {
+            if let imageURL {
+                ProductImageView(url: imageURL)
+                    .frame(maxWidth: .infinity)
+                    .listRowBackground(Color.clear)
+            }
+
+            TextField("Item Name", text: $name)
+
+            TextField("Brand (Optional)", text: $brand)
+                .textContentType(.organizationName)
+
+            TextField("Barcode (Optional)", text: $barcode)
                 .keyboardType(.numberPad)
                 .textContentType(.none)
-                .padding(12)
-                .background(Color(.systemGray6))
-                .clipShape(.rect(cornerRadius: 10))
 
             buttonLayout {
                 Button(action: scanAction) {
@@ -392,7 +396,7 @@ private struct AddItemBarcodeSection: View {
                 .tint(Color.sproutGreen)
 
                 Button(action: lookupAction) {
-                    Label("Look Up Product", systemImage: "magnifyingglass")
+                    Label("Look Up", systemImage: "magnifyingglass")
                 }
                 .buttonStyle(.bordered)
                 .disabled(
@@ -400,12 +404,38 @@ private struct AddItemBarcodeSection: View {
                         || lookupState == .loading
                 )
             }
+            .controlSize(.large)
 
             ProductLookupStatusView(state: lookupState)
         }
-        .padding(.horizontal)
+    }
+}
+
+private struct AddItemInventorySection: View {
+    @Binding var packageSize: String
+    @Binding var packageCount: Int
+
+    var body: some View {
+        Section("Inventory") {
+            TextField("Package Size (for example, 12 oz)", text: $packageSize)
+
+            Stepper(value: $packageCount, in: 1...100) {
+                LabeledContent("Number of Packages", value: "\(packageCount)")
+            }
+
+            LabeledContent("Total", value: inventorySummary)
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("Inventory total: \(inventorySummary)")
+        }
     }
 
+    private var inventorySummary: String {
+        guard let size = packageSize.nilIfBlank else {
+            return packageCount == 1 ? "1 package" : "\(packageCount) packages"
+        }
+
+        return packageCount == 1 ? size : "\(packageCount) × \(size)"
+    }
 }
 
 private struct ProductLookupStatusView: View {
@@ -447,56 +477,9 @@ private struct ProductLookupStatusView: View {
     }
 }
 
-private struct AddItemProductDetailsSection: View {
-    @Binding var brand: String
-    @Binding var packageSize: String
-    @Binding var packageCount: Int
-    let imageURL: URL?
-
-    var body: some View {
-        LabeledField(title: "Package Details") {
-            if let imageURL {
-                ProductImageView(url: imageURL)
-                    .frame(maxWidth: .infinity)
-            }
-
-            TextField("Brand", text: $brand)
-                .textContentType(.organizationName)
-                .padding(12)
-                .background(Color(.systemGray6))
-                .clipShape(.rect(cornerRadius: 10))
-
-            TextField("Package size (for example, 12 oz)", text: $packageSize)
-                .padding(12)
-                .background(Color(.systemGray6))
-                .clipShape(.rect(cornerRadius: 10))
-
-            Stepper(value: $packageCount, in: 1...100) {
-                LabeledContent("Number of Packages", value: "\(packageCount)")
-            }
-            .padding(12)
-            .background(Color(.systemGray6))
-            .clipShape(.rect(cornerRadius: 10))
-
-            Text(inventorySummary)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .accessibilityLabel("Inventory total: \(inventorySummary)")
-        }
-        .padding(.horizontal)
-    }
-
-    private var inventorySummary: String {
-        guard let size = packageSize.nilIfBlank else {
-            return packageCount == 1 ? "1 package" : "\(packageCount) packages"
-        }
-
-        return packageCount == 1 ? size : "\(packageCount) × \(size)"
-    }
-}
-
 struct ProductImageView: View {
     let url: URL
+    var height: CGFloat = 140
 
     var body: some View {
         AsyncImage(url: url) { phase in
@@ -517,7 +500,7 @@ struct ProductImageView: View {
                 EmptyView()
             }
         }
-        .frame(height: 140)
+        .frame(height: height)
         .clipShape(.rect(cornerRadius: 12))
     }
 }
@@ -554,33 +537,22 @@ private struct BarcodeScannerSheet: View {
 }
 
 private struct AddItemDatesSection: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
     @Binding var purchaseDate: Date
     @Binding var expirationDate: Date
 
     var body: some View {
-        let layout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
-            : AnyLayout(HStackLayout(spacing: 16))
-
-        layout {
-            dateField(title: "Purchase Date", selection: $purchaseDate)
-            dateField(title: "Expiration Date", selection: $expirationDate)
+        Section("Dates") {
+            DatePicker(
+                "Purchase Date",
+                selection: $purchaseDate,
+                displayedComponents: .date
+            )
+            DatePicker(
+                "Expiration Date",
+                selection: $expirationDate,
+                displayedComponents: .date
+            )
         }
-        .padding(.horizontal)
-    }
-
-    private func dateField(title: LocalizedStringKey, selection: Binding<Date>) -> some View {
-        LabeledField(title: title) {
-            DatePicker(title, selection: selection, displayedComponents: .date)
-                .datePickerStyle(.compact)
-                .labelsHidden()
-                .padding(12)
-                .background(Color(.systemGray6))
-                .clipShape(.rect(cornerRadius: 10))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -589,64 +561,19 @@ private struct AddItemNotificationSection: View {
     @Binding var notificationTime: Int
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Expiration Alert")
-                .font(.headline)
-                .padding(.bottom, 2)
-
+        Section("Reminder") {
             Toggle("Enable Notification", isOn: $sendNotification)
                 .tint(Color.sproutGreen)
 
-            Text("Remind me this many days before expiration:")
-                .font(.subheadline)
-                .foregroundStyle(Color.sproutGreen)
-
-            Picker("Days Before Expiration", selection: $notificationTime) {
-                ForEach(1...5, id: \.self) { day in
-                    Text("\(day)")
+            if sendNotification {
+                Picker("Notify Me", selection: $notificationTime) {
+                    ForEach(1...5, id: \.self) { day in
+                        Text(day == 1 ? "1 day before" : "\(day) days before")
+                            .tag(day)
+                    }
                 }
+                .pickerStyle(.navigationLink)
             }
-            .pickerStyle(.segmented)
-            .disabled(!sendNotification)
-        }
-        .padding(12)
-        .background(Color(.systemGray6))
-        .clipShape(.rect(cornerRadius: 10))
-        .padding(.horizontal)
-    }
-}
-
-private struct AddItemSaveButton: View {
-    let isSaving: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(isSaving ? "Saving…" : "Save Item")
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .foregroundStyle(Color.sproutGreen)
-                .background(Color(.systemGray6))
-                .clipShape(.rect(cornerRadius: 12))
-                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 2)
-                .padding(.horizontal)
-        }
-        .disabled(isSaving)
-    }
-}
-
-private struct LabeledField<Content: View>: View {
-    let title: LocalizedStringKey
-    @ViewBuilder let content: Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.subheadline)
-                .foregroundStyle(Color.sproutGreen)
-
-            content
         }
     }
 }

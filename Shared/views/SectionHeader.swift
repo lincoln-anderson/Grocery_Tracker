@@ -12,13 +12,17 @@ struct SectionHeader: View {
     let color: Color
     
     var body: some View {
-            HStack(spacing: 6) {
-                Text(text)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-            }
-        .accessibilityAddTraits(.isHeader)
-        .padding(.horizontal, 20)
-            .frame(maxWidth: .infinity ,alignment: .leading)
+        HStack(spacing: 8) {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+                .accessibilityHidden(true)
+
+            Text(text)
+                .font(.headline)
+                .foregroundStyle(.primary)
         }
+        .accessibilityAddTraits(.isHeader)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 }

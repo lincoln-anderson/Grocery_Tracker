@@ -3,12 +3,17 @@
     <entity name="GroceryItem" representedClassName="GroceryItem" syncable="YES" codeGenerationType="class">
         <attribute name="barcode" optional="YES" attributeType="String"/>
         <attribute name="brand" optional="YES" attributeType="String"/>
+        <attribute name="completedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="imageURL" optional="YES" attributeType="String"/>
+        <attribute name="lifecycleStatus" optional="YES" attributeType="String"/>
         <attribute name="measurement" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notificationIdentifier" optional="YES" attributeType="String"/>
         <attribute name="packageSize" optional="YES" attributeType="String"/>
         <attribute name="purchasedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="reminderDaysBefore" optional="YES" attributeType="Integer 16" defaultValueString="3" usesScalarValueType="YES"/>
+        <attribute name="remindersEnabled" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
     </entity>
 </model>

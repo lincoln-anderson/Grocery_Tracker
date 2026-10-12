@@ -5,82 +5,252 @@ import SwiftUI
 import CoreData
 import UserNotifications
 
-struct Git: Codable, Identifiable {
-    let id: Int
-    let login: String
-}
-
 struct GroceryItemGrid: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.colorScheme) var colorScheme
-    
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \GroceryItem.expirationDate, ascending: true)],
+        predicate: NSPredicate(
+            format: "lifecycleStatus == nil OR lifecycleStatus == %@",
+            GroceryItemLifecycleStatus.active.rawValue
+        ),
         animation: .default)
     private var groceryItems: FetchedResults<GroceryItem>
     
-    @State var showingAddSheet = false
-    @State var showingRemoveSheet = false
-    @State var showingEditSheet = false
-    @State var showingAlert = false
-    @State var testString = ""
-    @State private var git = Git(id: 1, login: "lincoln")
+    @State private var showingAddSheet = false
+    @State private var pendingCompletion: PendingGroceryCompletion?
+    @State private var completionError: (any Error)?
     
-    let columns = [GridItem(.adaptive(minimum: 180))]
-    
-    
-    
-    
-    
+    private let columns = [GridItem(.adaptive(minimum: 260), spacing: 16)]
+
     var body: some View {
-        VStack {
-            NavigationStack{
-                ScrollView {
-                    if groceryItems.isEmpty {
-                        Text("Tap the \"Add Item\" button to add your groceries and begin tracking the expiration dates")
-                            .bold()
-                            .font(.title)
-                            .foregroundStyle(Color.sproutGreen)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
-                    }
-                    
-                    let sections = buildSections(from: groceryItems)
-                    LazyVGrid(columns: columns, spacing: 15, pinnedViews: .sectionHeaders) {
-                        ForEach(sections, id: \.title) { section in
-                            GroceryItemGridSection(section: section)
-                        }
-                    }
-                }
-                AddandRemoveButtonView(showingAddSheet: $showingAddSheet, showingRemoveSheet: $showingRemoveSheet, filterText: $testString)
+        Group {
+            if groceryItems.isEmpty {
+                GroceryEmptyState(addAction: { showingAddSheet = true })
+            } else if horizontalSizeClass == .regular {
+                GroceryGridContent(
+                    sections: buildSections(from: groceryItems),
+                    columns: columns,
+                    onComplete: beginCompletion
+                )
+            } else {
+                GroceryListContent(
+                    sections: buildSections(from: groceryItems),
+                    onComplete: beginCompletion
+                )
             }
-            Spacer()
+        }
+        .navigationTitle("Groceries")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showingAddSheet = true
+                } label: {
+                    Label("Add Item", systemImage: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddSheet) {
+            AddItemView(
+                isPresented: $showingAddSheet,
+                expirationDate: .now,
+                purchaseDate: .now,
+                quantity: 1
+            )
+        }
+        .sheet(item: $pendingCompletion) { pendingCompletion in
+            CompletionQuantitySheet(completion: pendingCompletion) { packageCount in
+                complete(
+                    pendingCompletion.item,
+                    as: pendingCompletion.status,
+                    packageCount: packageCount
+                )
+            }
+        }
+        .alert("Couldn’t Update Item", item: $completionError) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { _ in
+            Text("The grocery couldn’t be moved to History. Please try again.")
         }
     }
-    
+
     func buildSections(from items: FetchedResults<GroceryItem>) -> [GrocerySection] {
-        let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
-        let today = groceryItems.filter { $0.expirationDate?.isToday == true }
-        let soon = groceryItems.filter {
+        let expired = items.filter { $0.expirationDate?.isExpired == true }
+        let today = items.filter { $0.expirationDate?.isToday == true }
+        let soon = items.filter {
             guard let date = $0.expirationDate else { return false }
             return !date.isToday && (date.isTomorrow || date.isWithin(days: 7))
         }
-        let later = groceryItems.filter {
+        let later = items.filter {
             guard let date = $0.expirationDate else { return false }
             return !date.isWithin(days: 7) && date > Date()
         }
-        
-        let sections = [
+
+        return [
             expired.isEmpty ? nil : GrocerySection(title: "Expired", color: .red, items: expired),
-            today.isEmpty ? nil : GrocerySection(title: "Expires Today", color: .yellow, items: today),
-            soon.isEmpty ? nil : GrocerySection(title: "Expires Soon", color: .sproutGreen, items: soon),
-            later.isEmpty ? nil : GrocerySection(title: "Expires Later", color: .sproutGreen, items: later),
+            today.isEmpty ? nil : GrocerySection(title: "Expires Today", color: .orange, items: today),
+            soon.isEmpty ? nil : GrocerySection(title: "Expires Soon", color: .orange, items: soon),
+            later.isEmpty ? nil : GrocerySection(title: "Expires Later", color: .secondary, items: later),
         ].compactMap { $0 }
-        print(sections)
-        return sections
-        
     }
-    
+
+    private func beginCompletion(
+        _ item: GroceryItem,
+        _ status: GroceryItemLifecycleStatus
+    ) {
+        if item.packageCount > 1 {
+            pendingCompletion = PendingGroceryCompletion(item: item, status: status)
+        } else {
+            complete(item, as: status, packageCount: 1)
+        }
+    }
+
+    private func complete(
+        _ item: GroceryItem,
+        as status: GroceryItemLifecycleStatus,
+        packageCount: Int
+    ) {
+        do {
+            let result = try GroceryItemLifecycleService.complete(
+                item,
+                as: status,
+                packageCount: packageCount,
+                in: viewContext
+            )
+
+            if let identifier = result.notificationIdentifierToCancel {
+                let center = UNUserNotificationCenter.current()
+                center.removePendingNotificationRequests(withIdentifiers: [identifier])
+                center.removeDeliveredNotifications(withIdentifiers: [identifier])
+            }
+        } catch {
+            completionError = error
+        }
+    }
+}
+
+private struct GroceryEmptyState: View {
+    let addAction: () -> Void
+
+    var body: some View {
+        ContentUnavailableView {
+            Label("No Groceries Yet", systemImage: "basket")
+        } description: {
+            Text("Add a grocery to track its expiration date and receive a reminder before it expires.")
+        } actions: {
+            Button(action: addAction) {
+                Label("Add Item", systemImage: "plus")
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(.sproutGreen)
+        }
+    }
+}
+
+private struct GroceryListContent: View {
+    let sections: [GrocerySection]
+    let onComplete: (GroceryItem, GroceryItemLifecycleStatus) -> Void
+
+    var body: some View {
+        List {
+            ForEach(sections, id: \.title) { section in
+                GroceryItemGridSection(
+                    section: section,
+                    cardStyle: .list,
+                    onComplete: onComplete
+                )
+            }
+        }
+        .listStyle(.insetGrouped)
+    }
+}
+
+private struct GroceryGridContent: View {
+    let sections: [GrocerySection]
+    let columns: [GridItem]
+    let onComplete: (GroceryItem, GroceryItemLifecycleStatus) -> Void
+
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16, pinnedViews: .sectionHeaders) {
+                ForEach(sections, id: \.title) { section in
+                    GroceryItemGridSection(
+                        section: section,
+                        cardStyle: .grid,
+                        onComplete: onComplete
+                    )
+                }
+            }
+            .padding(.horizontal)
+        }
+        .swipeActionsContainer()
+    }
+}
+
+struct PendingGroceryCompletion: Identifiable {
+    let item: GroceryItem
+    let status: GroceryItemLifecycleStatus
+
+    var id: NSManagedObjectID {
+        item.objectID
+    }
+}
+
+struct CompletionQuantitySheet: View {
+    @Environment(\.dismiss) private var dismiss
+
+    let completion: PendingGroceryCompletion
+    let confirmAction: (Int) -> Void
+
+    @State private var selectedPackageCount = 1
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Stepper(
+                        value: $selectedPackageCount,
+                        in: 1...completion.item.packageCount
+                    ) {
+                        LabeledContent(
+                            "Packages",
+                            value: "\(selectedPackageCount) of \(completion.item.packageCount)"
+                        )
+                    }
+                } footer: {
+                    Text(footerText)
+                }
+            }
+            .navigationTitle(actionTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(actionTitle) {
+                        confirmAction(selectedPackageCount)
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium])
+    }
+
+    private var actionTitle: String {
+        completion.status == .used ? "Mark Used" : "Discard"
+    }
+
+    private var footerText: String {
+        let destination = completion.status == .used ? "Used" : "Discarded"
+        return "The selected packages will move to the \(destination) section in History."
+    }
 }
 
 

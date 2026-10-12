@@ -8,14 +8,17 @@ import SwiftUI
 
 struct MainTabView: View {
     var body: some View {
-        SproutsHeader()
         TabView {
-            Tab("Tracker", systemImage: "leaf") {
-                GroceryItemGrid()
+            Tab("Groceries", systemImage: "leaf") {
+                NavigationStack {
+                    GroceryItemGrid()
+                }
             }
 
-            Tab("Profile", systemImage: "person") {
-                ProfileView()
+            Tab("History", systemImage: "clock.arrow.circlepath") {
+                NavigationStack {
+                    HistoryView()
+                }
             }
         }
         .tint(.sproutGreen)

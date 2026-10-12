@@ -31,6 +31,14 @@ private struct GroceryTrackerRootView: View {
                     \.managedObjectContext,
                     persistenceController.container.viewContext
                 )
+                .task {
+                    await LegacyReminderMigration.runIfNeeded(
+                        in: persistenceController.container.viewContext
+                    )
+                    GroceryWidgetSnapshotStore.refresh(
+                        in: persistenceController.container.viewContext
+                    )
+                }
         case .failed:
             PersistentStoreRecoveryView(
                 retryAction: persistenceController.retryLoading
