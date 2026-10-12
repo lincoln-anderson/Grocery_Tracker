@@ -15,8 +15,6 @@ public struct AddandRemoveButtonView: View {
     
     @Binding var filterText: String
     
-    @Environment(\.managedObjectContext) var viewContext
-    
     public var body: some View {
         HStack {
             Button("Add Item") {
@@ -30,7 +28,6 @@ public struct AddandRemoveButtonView: View {
                     purchaseDate: Date(),
                     quantity: 1
                 )
-                .environment(\.managedObjectContext, viewContext)
             }
             
             
@@ -43,7 +40,6 @@ public struct AddandRemoveButtonView: View {
                     isPresented: $showingRemoveSheet,
                     filterString: $filterText
                 )
-                .environment(\.managedObjectContext, viewContext)
             }
             
             

@@ -5,6 +5,7 @@
 //  Created by lincoln anderson on 4/28/21.
 //
 
+import CoreData
 import SwiftUI
 
 struct AddItemView: View {
@@ -27,6 +28,7 @@ struct AddItemView: View {
     @State var sendNotification: Bool = true
     
     @State var notificationTime: Int = 3
+    @State private var persistenceError: (any Error)?
     
     enum Measurements: String, CaseIterable, Identifiable {
         
@@ -159,7 +161,7 @@ struct AddItemView: View {
                 .padding(.horizontal)
                 
                 Button(action: {
-                    if sendNotification == true {
+                    if sendNotification {
                         let content = UNMutableNotificationContent()
                         content.title = "\(newName) expires soon!"
                         
@@ -184,12 +186,19 @@ struct AddItemView: View {
                         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
                         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
                         UNUserNotificationCenter.current().add(request)
-                        
-                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Int16(quantity), measurement: measurement)
-                        self.isPresented = false
-                    } else {
-                        newItem(newName: newName, expirationDate: expirationDate, purchaseDate: purchaseDate, quantity: Int16(quantity), measurement: measurement)
-                        self.isPresented = false
+                    }
+
+                    do {
+                        try newItem(
+                            newName: newName,
+                            expirationDate: expirationDate,
+                            purchaseDate: purchaseDate,
+                            quantity: Int16(quantity),
+                            measurement: measurement
+                        )
+                        isPresented = false
+                    } catch {
+                        persistenceError = error
                     }
                 }) {
                     Text("Save Item")
@@ -210,29 +219,32 @@ struct AddItemView: View {
             
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
+        .alert("Couldn’t Save Item", item: $persistenceError) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { _ in
+            Text("Your item couldn’t be saved. Please try again.")
+        }
     }
     
-    func newItem(newName: String, expirationDate: Date, purchaseDate: Date, quantity: Int16, measurement: String) {
+    private func newItem(
+        newName: String,
+        expirationDate: Date,
+        purchaseDate: Date,
+        quantity: Int16,
+        measurement: String
+    ) throws {
         let newItem = GroceryItem(context: viewContext)
-        
         newItem.name = newName
-        
         newItem.expirationDate = expirationDate
-        
         newItem.purchasedDate = purchaseDate
-        
         newItem.quantity = quantity
-        
         newItem.measurement = measurement
-        
+
         do {
             try viewContext.save()
         } catch {
-            print("Core Data save error: \(error.localizedDescription)")
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            viewContext.delete(newItem)
+            throw error
         }
     }
 }

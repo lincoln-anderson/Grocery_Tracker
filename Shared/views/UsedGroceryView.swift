@@ -14,9 +14,10 @@ struct UsedGroceryView: View {
     
     @Binding var isPresented: Bool
     @Binding var filterString: String
+    @State private var persistenceError: (any Error)?
     
     var body: some View {
-        VStack() {
+        VStack {
             Text("Swipe left to delete")
                 .font(.subheadline)
                 .foregroundColor(.sproutGreen)
@@ -39,17 +40,23 @@ struct UsedGroceryView: View {
             }
             .listStyle(.plain)
         }
+        .alert("Couldn’t Delete Item", item: $persistenceError) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { _ in
+            Text("The item couldn’t be deleted. Please try again.")
+        }
     }
     
     private func delete(_ item: GroceryItem) {
         withAnimation {
             viewContext.delete(item)
+
             do {
                 try viewContext.save()
             } catch {
-                print("Core Data save error: \(error.localizedDescription)")
+                viewContext.rollback()
+                persistenceError = error
             }
-
         }
     }
 }
