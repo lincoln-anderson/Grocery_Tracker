@@ -5,15 +5,18 @@ struct SproutsHeader: View {
         HStack(spacing: 8) {
             Image(systemName: "leaf")
                 .font(.title2)
-                .foregroundColor(.sproutGreen)
+                .foregroundStyle(Color.sproutGreen)
+                .accessibilityHidden(true)
 
             Text("Sprouts")
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(.sproutGreen)
+                .foregroundStyle(Color.sproutGreen)
         }
         .padding()
         .frame(maxWidth: .infinity)
         .background(Color(.systemGray6))
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 }

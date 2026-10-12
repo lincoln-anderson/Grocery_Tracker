@@ -32,7 +32,7 @@ struct ItemDetailView: View {
                 Text("Grocery Item Details")
                     .font(.largeTitle)
                     .bold()
-                    .foregroundColor(.sproutGreen)
+                    .foregroundStyle(Color.sproutGreen)
                     .padding(.top)
                 
                 Divider()
@@ -41,12 +41,12 @@ struct ItemDetailView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Item Name")
                         .font(.caption)
-                        .foregroundColor(.sproutGreen)
+                        .foregroundStyle(Color.sproutGreen)
                     Text(item.displayName)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
-                        .cornerRadius(8)
+                        .clipShape(.rect(cornerRadius: 8))
                 }
                 
                 // Dates
@@ -56,36 +56,36 @@ struct ItemDetailView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Purchase Date")
                             .font(.caption)
-                            .foregroundColor(.sproutGreen)
+                            .foregroundStyle(Color.sproutGreen)
                         Text(item.purchasedDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A")
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(.systemGray6))
-                            .cornerRadius(8)
+                            .clipShape(.rect(cornerRadius: 8))
                     }
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Expiration Date")
                             .font(.caption)
-                            .foregroundColor(.sproutGreen)
+                            .foregroundStyle(Color.sproutGreen)
                         Text(item.expirationDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A")
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(.systemGray6))
-                            .cornerRadius(8)
+                            .clipShape(.rect(cornerRadius: 8))
                     }
                 }
                 HStack(spacing: 20) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Days Until Expiration")
                             .font(.caption)
-                            .foregroundColor(.sproutGreen)
+                            .foregroundStyle(Color.sproutGreen)
                         
                         Text(daysUntilExpiration)
                             .italic()
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(.systemGray6))
-                            .cornerRadius(8)
+                            .clipShape(.rect(cornerRadius: 8))
                     }
                     
                     
@@ -95,12 +95,12 @@ struct ItemDetailView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Quantity & Measurement")
                         .font(.caption)
-                        .foregroundColor(.sproutGreen)
+                        .foregroundStyle(Color.sproutGreen)
                     Text("\(item.quantity) \(item.measurement ?? "")")
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
-                        .cornerRadius(8)
+                        .clipShape(.rect(cornerRadius: 8))
                 }
                 
                 Spacer()

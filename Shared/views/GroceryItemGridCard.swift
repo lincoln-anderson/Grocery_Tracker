@@ -4,69 +4,58 @@
 import SwiftUI
 
 struct GroceryItemGridCard: View {
-
-    @Environment(\.colorScheme) var colorScheme
-
-    var item: GroceryItem
-
-    var containerWidth: CGFloat = UIScreen.main.bounds.width - 32.0
+    let item: GroceryItem
 
     var body: some View {
-
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.displayName)
-                    .font(.headline)
-                    .bold()
-                    .foregroundColor(.primary)
+                    .font(.headline.bold())
+                    .foregroundStyle(.primary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
-                    .frame(width: containerWidth / 3, height: 52, alignment: .leading)
+                    .frame(minHeight: 52, alignment: .leading)
 
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
-                        .foregroundColor(.sproutGreen)
+                        .foregroundStyle(Color.sproutGreen)
+                        .accessibilityHidden(true)
                     Text(item.expirationDate?.shortDisplayString ?? "")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 HStack(spacing: 6) {
                     Image(systemName: "scalemass")
-                        .foregroundColor(.sproutGreen)
+                        .foregroundStyle(Color.sproutGreen)
+                        .accessibilityHidden(true)
                     Text("\(item.quantity) \(item.measurement ?? "")")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
+
             Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color(.systemGray6))
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .clipShape(.rect(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
     }
 }
 
-struct GroceryItemGridView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.preview.container.viewContext
+#Preview("Grocery Item Card") {
+    let context = PersistenceController.preview.container.viewContext
+    let item = GroceryItem(context: context)
+    item.expirationDate = .now
+    item.name = "Canned Beans"
+    item.quantity = 2
+    item.measurement = "cans"
 
-    static var previews: some View {
-        let item = {
-            let i = GroceryItem(context: viewContext)
-            i.expirationDate = Date()
-            i.name = "Canned Beans"
-            i.quantity = 2
-            i.measurement = "cans"
-            return i
-        }()
-
-        return VStack(spacing: 16) {
-            GroceryItemGridCard(item: item)
-                .environment(\.managedObjectContext, viewContext)
-        }
-        .previewLayout(.sizeThatFits)
-    }
-
+    return GroceryItemGridCard(item: item)
+        .environment(\.managedObjectContext, context)
+        .padding(.vertical)
 }

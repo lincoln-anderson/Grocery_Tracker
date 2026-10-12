@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import UIKit
 
 extension Color {
-    public static var sproutGreen: Color {
-        return Color(red: 0.32, green: 0.55, blue: 0.39)
-    }
+    public static let sproutGreen = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.40, green: 0.70, blue: 0.48, alpha: 1)
+            }
+
+            return UIColor(red: 0.24, green: 0.46, blue: 0.31, alpha: 1)
+        }
+    )
 }
