@@ -7,6 +7,7 @@
 
 import CoreData
 import SwiftUI
+import UserNotifications
 
 struct AddItemView: View {
     
@@ -29,7 +30,14 @@ struct AddItemView: View {
     
     @State var notificationTime: Int = 3
     @State private var persistenceError: (any Error)?
+    @State private var notificationError: (any Error)?
+    @State private var isSaving = false
     
+    private enum ReminderError: Error {
+        case authorizationDenied
+        case invalidDate
+    }
+
     enum Measurements: String, CaseIterable, Identifiable {
         
         case oz
@@ -41,12 +49,6 @@ struct AddItemView: View {
     }
     
     var containerHeight:CGFloat = UIScreen.main.bounds.height
-    
-    static let DateFormat: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E, MMM d"
-        return formatter
-    }()
     
     var body: some View {
         VStack{
@@ -160,47 +162,11 @@ struct AddItemView: View {
                 .cornerRadius(10)
                 .padding(.horizontal)
                 
-                Button(action: {
-                    if sendNotification {
-                        let content = UNMutableNotificationContent()
-                        content.title = "\(newName) expires soon!"
-                        
-                        let formattedDate = AddItemView.DateFormat.string(from: self.expirationDate)
-                        content.subtitle = "Expiration Date \(formattedDate)"
-                        content.sound = UNNotificationSound.default
-                        
-                        var dateComponents = DateComponents()
-                        dateComponents.hour = 8
-                        dateComponents.minute = 00
-                        
-                        let newDateFormatter = DateFormatter()
-                        newDateFormatter.dateFormat = "MM"
-                        dateComponents.month = Int(newDateFormatter.string(from: expirationDate))
-                        
-                        newDateFormatter.dateFormat = "yyyy"
-                        dateComponents.year = Int(newDateFormatter.string(from: expirationDate))
-                        
-                        newDateFormatter.dateFormat = "dd"
-                        dateComponents.day = (Int(newDateFormatter.string(from: expirationDate)) ?? 0) - notificationTime
-                        
-                        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-                        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                        UNUserNotificationCenter.current().add(request)
+                Button {
+                    Task {
+                        await saveItem()
                     }
-
-                    do {
-                        try newItem(
-                            newName: newName,
-                            expirationDate: expirationDate,
-                            purchaseDate: purchaseDate,
-                            quantity: Int16(quantity),
-                            measurement: measurement
-                        )
-                        isPresented = false
-                    } catch {
-                        persistenceError = error
-                    }
-                }) {
+                } label: {
                     Text("Save Item")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
@@ -211,6 +177,7 @@ struct AddItemView: View {
                         .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 2)
                         .padding(.horizontal)
                 }
+                .disabled(isSaving)
             }
             
             if containerHeight < 1000 {
@@ -224,8 +191,95 @@ struct AddItemView: View {
         } message: { _ in
             Text("Your item couldn’t be saved. Please try again.")
         }
+        .alert("Reminder Not Scheduled", item: $notificationError) { _ in
+            Button("OK", role: .cancel) {
+                isPresented = false
+            }
+        } message: { _ in
+            Text("The item was saved, but its expiration reminder couldn’t be scheduled.")
+        }
     }
     
+    private func saveItem() async {
+        guard !isSaving else { return }
+
+        isSaving = true
+        defer { isSaving = false }
+
+        do {
+            try newItem(
+                newName: newName,
+                expirationDate: expirationDate,
+                purchaseDate: purchaseDate,
+                quantity: Int16(quantity),
+                measurement: measurement
+            )
+        } catch {
+            persistenceError = error
+            return
+        }
+
+        guard sendNotification else {
+            isPresented = false
+            return
+        }
+
+        do {
+            try await scheduleExpirationReminder()
+            isPresented = false
+        } catch {
+            notificationError = error
+        }
+    }
+
+    private func scheduleExpirationReminder() async throws {
+        let notificationCenter = UNUserNotificationCenter.current()
+        let isAuthorized = try await notificationCenter.requestAuthorization(
+            options: [.alert, .sound]
+        )
+
+        guard isAuthorized else {
+            throw ReminderError.authorizationDenied
+        }
+
+        let calendar = Calendar.current
+        guard let reminderDay = calendar.date(
+            byAdding: .day,
+            value: -notificationTime,
+            to: expirationDate
+        ),
+        let reminderDate = calendar.date(
+            bySettingHour: 8,
+            minute: 0,
+            second: 0,
+            of: reminderDay
+        ),
+        reminderDate > Date() else {
+            throw ReminderError.invalidDate
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "\(newName) expires soon!"
+        content.subtitle = "Expiration Date \(expirationDate.formatted(date: .abbreviated, time: .omitted))"
+        content.sound = .default
+
+        let dateComponents = calendar.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: reminderDate
+        )
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: dateComponents,
+            repeats: false
+        )
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: trigger
+        )
+
+        try await notificationCenter.add(request)
+    }
+
     private func newItem(
         newName: String,
         expirationDate: Date,
