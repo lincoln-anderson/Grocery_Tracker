@@ -38,7 +38,6 @@ struct AddItemView: View {
 
   private enum ReminderError: Error {
     case authorizationDenied
-    case invalidDate
   }
 
   enum Measurements: String, CaseIterable, Identifiable {
@@ -255,22 +254,11 @@ struct AddItemView: View {
     }
 
     let calendar = Calendar.current
-    guard
-      let reminderDay = calendar.date(
-        byAdding: .day,
-        value: -notificationTime,
-        to: expirationDate
-      ),
-      let reminderDate = calendar.date(
-        bySettingHour: 8,
-        minute: 0,
-        second: 0,
-        of: reminderDay
-      ),
-      reminderDate > Date()
-    else {
-      throw ReminderError.invalidDate
-    }
+    let reminderDate = try ExpirationReminderCalculator.reminderDate(
+      for: expirationDate,
+      daysBefore: notificationTime,
+      calendar: calendar
+    )
 
     let content = UNMutableNotificationContent()
     content.title = "\(newName) expires soon!"
