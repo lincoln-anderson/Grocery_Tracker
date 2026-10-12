@@ -4,6 +4,7 @@
 //
 //  Created by lincoln anderson on 6/1/25.
 //
+import CoreData
 import SwiftUI
 
 
@@ -24,7 +25,7 @@ struct ProfileView: View {
         let expired = groceryItems.filter { $0.expirationDate?.isExpired == true }
         if expired.count != 0 {
             HStack {
-                Text("you have \(expired.count) expired items. Would you like to mark them as uses or thrown out?").foregroundColor(.sproutGreen)
+                Text("you have \(expired.count) expired items. Would you like to mark them as uses or thrown out?").foregroundStyle(Color.sproutGreen)
                 Button("Mark as Used") {
                     showingRemoveSheet = true
                 }
@@ -41,8 +42,10 @@ struct ProfileView: View {
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
+#Preview("Profile") {
+    ProfileView()
+        .environment(
+            \.managedObjectContext,
+            PersistenceController.preview.container.viewContext
+        )
 }

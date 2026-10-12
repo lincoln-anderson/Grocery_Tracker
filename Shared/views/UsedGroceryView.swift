@@ -20,7 +20,7 @@ struct UsedGroceryView: View {
         VStack {
             Text("Swipe left to delete")
                 .font(.subheadline)
-                .foregroundColor(.sproutGreen)
+                .foregroundStyle(Color.sproutGreen)
                 .padding(.horizontal)
                 .padding(.top, 4)
             List {
@@ -33,6 +33,9 @@ struct UsedGroceryView: View {
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
+                        }
+                        .accessibilityAction(named: "Delete") {
+                            delete(item)
                         }
                 }
                 .listRowInsets(EdgeInsets())
@@ -72,26 +75,31 @@ struct GroceryItemCard: View {
                 Spacer()
                 Text("\(item.quantity) \(item.measurement ?? "")")
                     .font(.subheadline)
-                    .foregroundColor(.sproutGreen)
+                    .foregroundStyle(Color.sproutGreen)
             }
             
             Text("Exp. Date \(item.expirationDate?.formatted(date: .abbreviated, time: .omitted) ?? "")")
                 .font(.footnote)
-                .foregroundColor(.sproutGreen)
+                .foregroundStyle(Color.sproutGreen)
         }
         .padding()
         .background(Color(.systemGray6))
-        .cornerRadius(12)
+        .clipShape(.rect(cornerRadius: 12))
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
     }
 }
 
-struct UsedGroceryView_Previews: PreviewProvider {
-    @State static var isShowing = false
-    @State static var testString = ""
-    
-    static var previews: some View {
-        UsedGroceryView(isPresented: $isShowing, filterString: $testString)
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
+#Preview("Used Groceries") {
+    @Previewable @State var isShowing = true
+    @Previewable @State var filterString = ""
+
+    UsedGroceryView(
+        isPresented: $isShowing,
+        filterString: $filterString
+    )
+    .environment(
+        \.managedObjectContext,
+        PersistenceController.preview.container.viewContext
+    )
 }

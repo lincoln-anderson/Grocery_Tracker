@@ -8,61 +8,43 @@
 import SwiftUI
 
 struct GroceryItemListView: View {
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    var passedGroceryItemName: String
-    
-    var passedGroceryItemPurchasedDate: Date
-    
-    var passedGroceryItemExpirationDate: Date
-    
-    var passedGroceryItemQuantity: Int16
-    
-    var passedGroceryItemMeasurement: String
-    
-    static let DateFormat: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "E, MMM d"
-            return formatter
-            }()
-    
+    let passedGroceryItemName: String
+    let passedGroceryItemPurchasedDate: Date
+    let passedGroceryItemExpirationDate: Date
+    let passedGroceryItemQuantity: Int16
+    let passedGroceryItemMeasurement: String
+
     var body: some View {
-        VStack{
+        VStack {
             Spacer()
-            HStack{
+
+            HStack {
                 Text(passedGroceryItemName)
-                    .foregroundColor(colorScheme == .dark ? .white : .black)
-                    .font(.title)
-                    .bold()
-                    
+                    .foregroundStyle(.primary)
+                    .font(.title.bold())
+
                 Spacer()
-                VStack{
-                    HStack{
-                        Text(String(self.passedGroceryItemQuantity))
-                            .bold()
-                        Text(self.passedGroceryItemMeasurement)
-                            .bold()
-                    }
-                    Text("Exp. Date \(self.passedGroceryItemExpirationDate, formatter: GroceryItemListView.DateFormat)")
+
+                VStack {
+                    Text("\(passedGroceryItemQuantity) \(passedGroceryItemMeasurement)")
                         .bold()
-                    
+                    Text(
+                        "Exp. Date \(passedGroceryItemExpirationDate.formatted(date: .abbreviated, time: .omitted))"
+                    )
+                    .bold()
                 }
             }
         }
     }
 }
-struct GroceryItemListView_Previews: PreviewProvider {
-    
-    static var viewContext = PersistenceController.preview.container.viewContext
-    
-    static var previews: some View {
-        let item = GroceryItem(context: viewContext)
-        item.expirationDate = Date()
-        item.name = "Sample"
-        item.quantity = 10
-        item.measurement = "Oz"
-        
-        return GroceryItemListView(passedGroceryItemName: item.name!, passedGroceryItemPurchasedDate: item.purchasedDate!, passedGroceryItemExpirationDate: item.expirationDate!, passedGroceryItemQuantity: item.quantity, passedGroceryItemMeasurement: item.measurement!).environment(\.managedObjectContext, viewContext)
-    }
+
+#Preview("Grocery Item List Row") {
+    GroceryItemListView(
+        passedGroceryItemName: "Sample",
+        passedGroceryItemPurchasedDate: .now,
+        passedGroceryItemExpirationDate: .now,
+        passedGroceryItemQuantity: 10,
+        passedGroceryItemMeasurement: "Oz"
+    )
+    .padding()
 }

@@ -52,6 +52,8 @@
 		01FFE3EB2DECD9EA006EA5D7 /* SproutsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FFE3E92DECD9E6006EA5D7 /* SproutsHeader.swift */; };
 		0335F366307D35EB00B381F9 /* ExpirationReminderCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0335F365307D35EB00B381F9 /* ExpirationReminderCalculator.swift */; };
 		0335F367307D35EB00B381F9 /* ExpirationReminderCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0335F365307D35EB00B381F9 /* ExpirationReminderCalculator.swift */; };
+		0335F376307D3BB100B381F9 /* AddItemValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0335F375307D3BB100B381F9 /* AddItemValidator.swift */; };
+		0335F377307D3BB100B381F9 /* AddItemValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0335F375307D3BB100B381F9 /* AddItemValidator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +118,7 @@
 		01FFE3E92DECD9E6006EA5D7 /* SproutsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SproutsHeader.swift; sourceTree = "<group>"; };
 		0335F365307D35EB00B381F9 /* ExpirationReminderCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirationReminderCalculator.swift; sourceTree = "<group>"; };
 		0335F36C307D375D00B381F9 /* Grocery TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Grocery TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0335F375307D3BB100B381F9 /* AddItemValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemValidator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -278,6 +281,7 @@
 				01A7CC992638946A00A5A40B /* Persistence.swift */,
 				01A7CC952638946A00A5A40B /* Grocery_Tracker.xcdatamodeld */,
 				0335F365307D35EB00B381F9 /* ExpirationReminderCalculator.swift */,
+				0335F375307D3BB100B381F9 /* AddItemValidator.swift */,
 			);
 			path = dataStructures;
 			sourceTree = "<group>";
@@ -494,6 +498,7 @@
 				01C1F7EF2DFC8F150082D9F7 /* GroceryItemExtension.swift in Sources */,
 				01A7CCC32638946D00A5A40B /* Grocery_TrackerApp.swift in Sources */,
 				0144A847283ED27E00F36D0C /* DateExtension.swift in Sources */,
+				0335F377307D3BB100B381F9 /* AddItemValidator.swift in Sources */,
 				01A7CCDD2639943300A5A40B /* AddItemView.swift in Sources */,
 				0164D9192DFC9A7C00DAE61E /* AddandRemoveButtonView.swift in Sources */,
 				01FFE3E72DECD61B006EA5D7 /* Profile.swift in Sources */,
@@ -528,6 +533,7 @@
 				01A7CCE42640755600A5A40B /* UsedGroceryView.swift in Sources */,
 				01FFE3EB2DECD9EA006EA5D7 /* SproutsHeader.swift in Sources */,
 				0164D9132DFC96AC00DAE61E /* GroceryItemGridSection.swift in Sources */,
+				0335F376307D3BB100B381F9 /* AddItemValidator.swift in Sources */,
 				01A7CCE726407D9100A5A40B /* HexColorExtension.swift in Sources */,
 				01A7CCDB2638A02200A5A40B /* GroceryItemListView.swift in Sources */,
 				01A7CCC82638946D00A5A40B /* Persistence.swift in Sources */,

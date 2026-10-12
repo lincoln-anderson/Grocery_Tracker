@@ -15,8 +15,9 @@ struct SectionHeader: View {
             HStack(spacing: 6) {
                 Text(text)
                     .font(.headline)
-                    .foregroundColor(color)
+                    .foregroundStyle(.primary)
             }
+        .accessibilityAddTraits(.isHeader)
         .padding(.horizontal, 20)
             .frame(maxWidth: .infinity ,alignment: .leading)
         }
